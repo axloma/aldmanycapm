@@ -1,0 +1,132 @@
+.ccForm {
+  position:relative;
+  box-sizing: content-box;
+  max-width: 24rem;
+  margin: auto;
+  margin-top: 2.5em;
+  padding: 2.5em 1.25em;
+  /* top:3rem; */
+  /* background:blue; */
+  border:2px solid gray ;
+  width:100%;
+}
+
+.ccForm label {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  color: hsl(278, 68%, 11%);
+  font-weight: 500;
+  margin-bottom: 0.45rem;
+}
+
+.ccForm input {
+  width: 100%;
+  font-weight: 500;
+  border: 1px solid hsl(270, 3%, 87%);
+  padding: 0.6rem 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+}
+
+.ccForm input:invalid {
+  border-color: hsl(0, 100%, 40%);
+}
+
+.ccForm input:focus {
+  outline: none;
+  border-top-color: hsl(249, 99%, 64%);
+  border-left-color: hsl(249, 99%, 64%);
+  border-right-color: hsl(278, 94%, 30%);
+  border-bottom-color: hsl(278, 94%, 30%);
+}
+
+.ccForm input::placeholder {
+  color: hsl(0, 0%, 84%);
+}
+
+.btn {
+  width: 100%;
+  color: white;
+  font-weight: 700;
+  font-size: 1em;
+  padding: 0.75em;
+  margin-top: 1rem;
+  background-color: hsl(278, 68%, 11%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.btn:hover {
+  background-color: hsl(278, 68%, 20%);
+}
+
+.flex {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.bottomContainer {
+  composes: flex;
+  gap: 1rem;
+}
+
+.expDate,
+.cvc {
+  flex: 1;
+}
+
+.expDate {
+  flex: 0.9;
+}
+
+.error {
+  margin-top: -0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.65em;
+  font-weight: 700;
+  color: hsl(0, 100%, 66%);
+}
+
+.complete {
+  text-align: center;
+  max-width: 24rem;
+  margin: 6rem auto;
+}
+
+.icon {
+  margin: 0 auto;
+}
+
+.thankYou {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  letter-spacing: 4px;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.msg {
+  color: hsl(279, 6%, 55%);
+  margin-top: 0;
+  font-weight: 500;
+}
+
+.continueBtn {
+  composes: btn;
+  width: 20rem;
+}
+
+@media all and (min-width: 1200px) {
+  .ccForm {
+    margin-top: auto;
+    margin-left: 22.5%;
+  }
+
+  .complete {
+    margin: auto;
+    margin-left: 22.5%;
+  }
+}
