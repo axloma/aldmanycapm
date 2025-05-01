@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import Tabs from './tabs'
 import { useContext } from 'react';
 import { RoomContext } from "../context/context";
+
 const nave = () => {
 
 const [isOpen,setIsOpen] =useState(false)
@@ -18,7 +19,12 @@ const handleNave =()=>{
     console.log(cuser)
   return (
        <>
-
+        <div className='snave'>
+            <ul className='item'>
+                <li>hi</li>
+                <li>buy</li>
+            </ul>
+        </div>
     <header className="header_area">
        <div className="container">
            <nav className="navbar navbar-expand-lg navbar-light">

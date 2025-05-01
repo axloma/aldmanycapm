@@ -1,46 +1,52 @@
-import { useState } from 'react'
-import {Route,Router,BrowserRouter,Routes} from 'react-router-dom';
-import './App.css'
+import { useState } from "react";
+import { Route, Router, BrowserRouter, Routes } from "react-router-dom";
+import "./App.css";
 // import { Helmet } from 'react-helmet';
-import Home from './pages/home';
-import Contact from './contact';
-import Nave from './components/nave';
-import Navet from './components/navetwo';
-import Footer from './components/footer';
-import About  from './pages/about';
-import Accomodation from './pages/accomodation';
-import Gallery from './pages/gallery';
-import Blog from './pages/blog';
-import Singleblog from './pages/singleblog';
-import SingleRoom from './pages/singleroom';
-import  Error from './pages/error';
+import Home from "./pages/home";
+import Contact from "./pages/contact";
+import Nave from "./components/nave";
+import Navet from "./components/navetwo";
+import Footer from "./components/footer";
+import About from "./pages/about";
+import Accomodation from "./pages/accomodation";
+import Gallery from "./pages/gallery";
+import Blog from "./pages/blog";
+import Singleblog from "./pages/singleblog";
+import SingleRoom from "./pages/singleroom";
+import Error from "./pages/error";
 // import { RoomProvider } from './context';
-import React, { Component } from 'react'
+import React, { Component } from "react";
 // import { useContext } from 'react';
-import Checkout from './pages/checkout/Checkout';
+import Checkout from "./pages/checkout/Checkout";
 // import Login from './pages/Login';
 // import Reg from './pages/Register';
 // import FG from './pages/ForgotPassword';
 
 // import SignUp from './pages/signup';
-import SignUp from "./pages/sign-up/SignUp"
+import SignUp from "./pages/sign-up/SignUp";
 
-import SignIn from "./pages/sign-in/SignIn"
-import Profile from './pages/profile';
-import { BookContextprovider } from './context/bookcontext';
+import SignIn from "./pages/sign-in/SignIn";
+import Profile from "./pages/profile";
+import { BookContextprovider } from "./context/bookcontext";
+import Dashboard from "./dashboard/dashboard";
+import { useLocation } from "react-router-dom";
+import Mybooking from "./pages/mybooking";
+
 function App() {
-// const value = useContext(RoomProvider)
-// console.log(value)
+  // const value = useContext(RoomProvider)
+  // console.log(value)
+
+  const isAdmin = useLocation().pathname.includes("aldamanyAdmin");
   return (
     <>
-    {/* <BrowserRouter> */}
-    {/* <Nave/>  */}
-    <Nave/>
+      {/* <BrowserRouter> */}
+      {!isAdmin && <Navet />}
+      {/* <Nave/> */}
 
-    {/* <RoomProvicer> */}
-      <Routes>  
-        <Route  exact path="/" Component={Home} />
-           {/* <Home /> */}
+      {/* <RoomProvicer> */}
+      <Routes>
+        <Route exact path="/" Component={Home} />
+        {/* <Home /> */}
         {/* </Route>  */}
         <Route exact path="/contact" element={<Contact />} />
         <Route exact path="/about" element={<About />} />
@@ -53,21 +59,21 @@ function App() {
         {/* <Route exact path="/test" element={<BookContextprovider />} /> */}
         {/* 
         <Route exact path="/login" element={<SignUp />} />*/}
-   
 
         <Route exact path="/reg" element={<SignUp />} />
-        <Route exact path="/login" element={<SignIn />} /> 
-        <Route exact path="/profile" element={<Profile />} /> 
+        <Route exact path="/login" element={<SignIn />} />
+        <Route exact path="/profile" element={<Profile />} />
+        <Route exact path="/dashboard" element={<Dashboard />} />
+        <Route exact path="/mybooking" element={<Mybooking />} />
 
-        <Route path="*" element={<Error/>} />
+        <Route path="*" element={<Error />} />
       </Routes>
-    {/* </RoomProvicer> */}
-    <Footer/>
- 
+      {/* </RoomProvicer> */}
+      <Footer />
 
-  {/* </BrowserRouter> */}
+      {/* </BrowserRouter> */}
     </>
   );
 }
 
-export default App
+export default App;

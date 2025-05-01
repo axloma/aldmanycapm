@@ -1,110 +1,137 @@
-import React from 'react'
-
+import React from "react";
+import { Link } from "react-router-dom";
 const gallery = () => {
   return (
-   <>
-     {/* <!--================Breadcrumb Area =================--> */}
-        <section  className="breadcrumb_area">
-            <div  className="overlay bg-parallax" data-stellar-ratio="0.8" data-stellar-vertical-offset="0" data-background=""></div>
-            <div  className="container">
-                <div  className="page-cover text-center">
-                    <h2  className="page-cover-tittle">Gallery</h2>
-                    <ol  className="breadcrumb">
-                        <li><a href="index.html">Home</a></li>
-                        <li  className="active">Gallery</li>
-                    </ol>
-                </div>
-            </div>
-        </section>
-        {/* <!--================Breadcrumb Area =================-->
+    <>
+      {/* <!--================Breadcrumb Area =================--> */}
+      <section className="breadcrumb_area">
+        <div
+          className="overlay bg-parallax"
+          data-stellar-ratio="0.8"
+          data-stellar-vertical-offset="0"
+          data-background=""
+        ></div>
+        <div className="container">
+          <div className="page-cover text-center">
+            <h2 className="page-cover-tittle">Gallery</h2>
+            <ol className="breadcrumb">
+              {/* <li><a href="index.html">Home</a></li> */}
+              <li className="homebtn">
+                {" "}
+                <Link to="/">Home</Link>
+              </li>
+              <li className="active">Gallery</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+      {/* <!--================Breadcrumb Area =================-->
         
         <!--================Breadcrumb Area =================--> */}
-        <section  className="gallery_area section_gap">
-            <div  className="container">
-                <div  className="section_title text-center">
-                    <h2  className="title_color">Royal Hotel Gallery</h2>
-                    <p>Who are in extremely love with eco friendly system.</p>
+      <section className="gallery_area section_gap">
+        <div className="container">
+          <div className="section_title text-center">
+            <h2 className="title_color">Royal Hotel Gallery</h2>
+            <p>Who are in extremely love with eco friendly system.</p>
+          </div>
+          <div className="row imageGallery1" id="gallery">
+            <div className="col-md-4 gallery_item">
+              <div className="gallery_img">
+                <img src="image/gallery/01.jpg" alt="" />
+                <div className="hover">
+                  <a className="light" href="image/gallery/01.jpg">
+                    <i className="fa fa-expand"></i>
+                  </a>
                 </div>
-                <div  className="row imageGallery1" id="gallery">
-                    <div  className="col-md-4 gallery_item">
-                        <div  className="gallery_img">
-                            <img src="image/gallery/01.jpg" alt=""/>
-                            <div  className="hover">
-                            	<a  className="light" href="image/gallery/01.jpg"><i  className="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div  className="col-md-4 gallery_item">
-                        <div  className="gallery_img">
-                            <img src="image/gallery/02.jpg" alt=""/>
-                            <div  className="hover">
-                            	<a  className="light" href="image/gallery/02.jpg"><i  className="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div  className="col-md-4 gallery_item">
-                        <div  className="gallery_img">
-                            <img src="image/gallery/03.jpg" alt=""/>
-                            <div  className="hover">
-                            	<a  className="light" href="image/gallery/03.jpg"><i  className="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div  className="col-md-4 gallery_item">
-                        <div  className="gallery_img">
-                            <img src="image/gallery/04.jpg" alt=""/>
-                            <div  className="hover">
-                            	<a  className="light" href="image/gallery/04.jpg"><i  className="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div  className="col-md-4 gallery_item">
-                        <div  className="gallery_img">
-                            <img src="image/gallery/06.jpg" alt=""/>
-                            <div  className="hover">
-                            	<a  className="light" href="image/gallery/05.jpg"><i  className="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div  className="col-md-4 gallery_item">
-                        <div  className="gallery_img">
-                            <img src="image/gallery/05.jpg" alt=""/>
-                            <div  className="hover">
-                            	<a  className="light" href="image/gallery/06.jpg"><i  className="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div  className="col-md-4 gallery_item">
-                        <div  className="gallery_img">
-                            <img src="image/gallery/01-1.jpg" alt=""/>
-                            <div  className="hover">
-                            	<a  className="light" href="image/gallery/01-1.jpg"><i  className="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div  className="col-md-4 gallery_item">
-                        <div  className="gallery_img">
-                            <img src="./image/gallery/02-1.jpg" alt=""/>
-                            <div  className="hover">
-                            	<a  className="light" href="./public/image/gallery/02-1.jpg"><i  className="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div  className="col-md-4 gallery_item">
-                        <div  className="gallery_img">
-                            <img src="image/gallery/03-1.jpg" alt=""/>
-                            <div  className="hover">
-                            	<a  className="light" href="image/gallery/03-1.jpg"><i  className="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </section>
-        {/* <!--================Breadcrumb Area =================--> */}
-   </>
-  )
-}
+            <div className="col-md-4 gallery_item">
+              <div className="gallery_img">
+                <img src="image/gallery/02.jpg" alt="" />
+                <div className="hover">
+                  <a className="light" href="image/gallery/02.jpg">
+                    <i className="fa fa-expand"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4 gallery_item">
+              <div className="gallery_img">
+                <img src="image/gallery/03.jpg" alt="" />
+                <div className="hover">
+                  <a className="light" href="image/gallery/03.jpg">
+                    <i className="fa fa-expand"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4 gallery_item">
+              <div className="gallery_img">
+                <img src="image/gallery/04.jpg" alt="" />
+                <div className="hover">
+                  <a className="light" href="image/gallery/04.jpg">
+                    <i className="fa fa-expand"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
 
-export default gallery
+            <div className="col-md-4 gallery_item">
+              <div className="gallery_img">
+                <img src="image/gallery/06.jpg" alt="" />
+                <div className="hover">
+                  <a className="light" href="image/gallery/05.jpg">
+                    <i className="fa fa-expand"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4 gallery_item">
+              <div className="gallery_img">
+                <img src="image/gallery/05.jpg" alt="" />
+                <div className="hover">
+                  <a className="light" href="image/gallery/06.jpg">
+                    <i className="fa fa-expand"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4 gallery_item">
+              <div className="gallery_img">
+                <img src="image/gallery/01-1.jpg" alt="" />
+                <div className="hover">
+                  <a className="light" href="image/gallery/01-1.jpg">
+                    <i className="fa fa-expand"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4 gallery_item">
+              <div className="gallery_img">
+                <img src="./image/gallery/02-1.jpg" alt="" />
+                <div className="hover">
+                  <a className="light" href="./public/image/gallery/02-1.jpg">
+                    <i className="fa fa-expand"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4 gallery_item">
+              <div className="gallery_img">
+                <img src="image/gallery/03-1.jpg" alt="" />
+                <div className="hover">
+                  <a className="light" href="image/gallery/03-1.jpg">
+                    <i className="fa fa-expand"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* <!--================Breadcrumb Area =================--> */}
+    </>
+  );
+};
+
+export default gallery;

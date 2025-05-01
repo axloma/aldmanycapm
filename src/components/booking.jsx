@@ -29,6 +29,7 @@ const booking = ({room}) => {
 
     const [openDate,setOpenDate] =useState(false)
     const {addToCart,removeFromCart,bookitem} = useContext(RoomContext)
+    console.log(typeof(addToCart))
     console.log(bookitem)
 
 function handleOp(name,oper){
@@ -128,9 +129,12 @@ function cancel(){
                         </div>
                             <div className="col-md-3">
                         { !booked ?
-                        <button className="book_now_btn button_hover"onClick={setitem}> <Link to='/checkout'> Book Now </Link></button>
+                        // <button className="book_now_btn button_hover"onClick={setitem}>
+                             <Link onClick={setitem} to='/checkout' className='book_now_btn button_hover'> Book Now </Link>
+                            //  {/* </button> */}
                             :
                         <button className="book_now_btn button_hover"onClick={cancel}> cancel</button>
+                        
                         }
                         </div>
                       

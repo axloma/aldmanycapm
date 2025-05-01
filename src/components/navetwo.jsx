@@ -1,80 +1,305 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Helmet } from 'react-helmet'
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import avatar from "../assets/ava.jpg";
+import ava from "../assets/user.png";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+import { Link } from "react-router-dom";
+import { borderRadius, textAlign } from "@mui/system";
+import { useContext, useState } from "react";
+import { RoomContext } from "../context/context";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import logo from "../assets/logo.jpeg";
+import { Translate } from "react-bootstrap-icons";
+const pages = {
+  HOME: "/",
+  "about us": "/about",
+  rooms: "/accomodation",
+  Gallery: "Gallery",
+  contact: "contact",
+};
+const settings = {
+  Profile: "profile",
+  Account: "account",
+  Dashboard: "userdashboard",
+};
 
-function BasicExample() {
+const settingsauth = {
+  Login: "login",
+  Signup: "sigunup",
+  SendMessage: "contact",
+};
+
+function ResponsiveAppBar() {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  // console.log(userlogedin)
+  const { userlogedin, handleuserChange, apilogout } = useContext(RoomContext);
+  console.log(typeof handleuserChange);
+  const [thisUserLoged, SetThisUserLoged] = useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+    console.log(handleuserChange(), "HANDLER");
+    SetThisUserLoged(handleuserChange());
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+    SetThisUserLoged(handleuserChange());
+  };
+  {
+  }
+  const stylebtn = {
+    display: "block",
+    my: 2,
+    backgroundColor: "#d0d0ea" || "#030304",
+    margin: ".4rem",
+    color: " hsl(0deg 0% 100%)",
+    padding: ".6rem",
+    fontSize: "1.1rem",
+    fontFamily: "monospace",
+    textAlign: "center",
+    alighnItem: "center",
+    borderRadius: "1rem",
+    "&:hover": {
+      background: "#efefef",
+      transform: "translateY(-1px)",
+    },
+  };
+  function logout() {
+    apilogout();
+  }
+  useEffect(() => {
+    console.log("hi");
+    SetThisUserLoged(localStorage.getItem("userProfile"));
+    // SetThisUserLoged(handleuserChange);
+  }, [thisUserLoged]);
+
   return (
-   
-   <nav className="bg-white border-gray-200 dark:bg-gray-900">
-  <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-  <a href="https://flowbite.com/" className="flex items-center space-x-3 rtl:space-x-reverse">
-      <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-      <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
-  </a>
-  <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-      <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-        <span className="sr-only">Open user menu</span>
-        <img className="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="user photo"/>
-      </button>
-      {/* <!-- Dropdown menu --> */}
-      <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
-        <div className="px-4 py-3">
-          <span className="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-          <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
-        </div>
-        <ul className="py-2" aria-labelledby="user-menu-button">
-          <li>
-            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</a>
-          </li>
-          <li>
-            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
-          </li>
-          <li>
-            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
-          </li>
-          <li>
-            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
-          </li>
-        </ul>
-      </div>
-      <button data-collapse-toggle="navbar-user" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-user" aria-expanded="false">
-        <span className="sr-only">Open main menu</span>
-        <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-        </svg>
-    </button>
-  </div>
-  <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
-    <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-      <li>
-        <a href="#" className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
-      </li>
-      <li>
-        <a href="#" className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">About</a>
-      </li>
-      <li>
-        <a href="#" className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Services</a>
-      </li>
-      <li>
-        <a href="#" className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Pricing</a>
-      </li>
-      <li>
-        <a href="#" className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Contact</a>
-      </li>
-    </ul>
-  </div>
-  </div>
-    <Helmet>
+    <AppBar
+      position="fixed"
+      style={{ backgroundColor: "#070707ba", minHeight: "5vh" }}
+    >
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          {/* <AdbIcon sx={{ display: { xs: "", md: "flex" }, mr: 1, src: "./" }} /> */}
+          <img
+            className="nav-logo"
+            src={logo}
+            alt="Porousway Logo"
+            width="40"
+            height="40"
+            style={{ backgroundColor: "gray", borderRadius: "20%" }}
+          />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              // letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          ></Typography>
 
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{ display: { xs: "block", md: "none" } }}
+            >
+              {/* {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu} >
+                  <Typography sx={{ textAlign: 'center' }} >{page}</Typography>
+                </MenuItem>
+              ))} */}
+            </Menu>
+          </Box>
+          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: "flex", md: "none" },
+              flexGrow: 1,
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            LOGO
+          </Typography>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+              justifyContent: "",
+              gap: "1rem",
+            }}
+          >
+            {
+              // pages.map(([key,value]) => (
 
-  <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-    </Helmet>
-</nav>
+              Object.keys(pages).map((item, i) => (
+                <Button key={item} onClick={handleCloseNavMenu} sx={stylebtn}>
+                  <Link to={pages[item]}>{item}</Link>
+                </Button>
+              ))
 
+              // })
+              // ))
+            }
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src={thisUserLoged ? avatar : ava} />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {/* {settings.map((setting) => (
+                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>
+                   <Link to={setting}> {setting}</Link>
+
+                  </Typography>
+                </MenuItem>
+              ))} */}
+              {thisUserLoged && (
+                <div>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography sx={{ textAlign: "center" }}>
+                      <Link to="/profile"> Profile</Link>
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography sx={{ textAlign: "center" }}>
+                      <Link to="/profile"> Account</Link>
+                    </Typography>
+                  </MenuItem>
+                  <Link to="/contact">
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography sx={{ textAlign: "center" }}>
+                        Send Message
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link to="/" onClick={apilogout}>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography sx={{ textAlign: "center" }}>
+                        {" "}
+                        logout
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                </div>
+              )}
+              {!thisUserLoged && (
+                <div>
+                  <Link to="/login">
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      Login
+                      <Typography sx={{ textAlign: "center" }}></Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link to="/reg">
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography sx={{ textAlign: "center" }}>
+                        Sign Up
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link to="/contact">
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography sx={{ textAlign: "center" }}>
+                        Send Message
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                </div>
+              )}
+
+              {/* {
+        Object.keys(settingsauth).map((item, i)=>{
+          <MenuItem key={item} onClick={handleCloseUserMenu}>
+              <Typography sx={{ textAlign: 'center' }}>
+                <Link to={i}> {item}</Link>
+
+                </Typography>
+          </MenuItem>
+        
+        })}  */}
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
-
 }
-
-export default BasicExample;
+export default ResponsiveAppBar;

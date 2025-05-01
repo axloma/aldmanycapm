@@ -14,11 +14,13 @@ const Room = memo(({ room }) => {
             <div className="col-lg-3 col-sm-6"  >
             <div className="accomodation_item text-center">
                 <div className="hotel_img">
-                    <img src={images[0] || defaultImg} alt="" className='roomimg'/>
+                    <img src={`https:`+images[0] || defaultImg} alt="" className='roomimg'/>
                     {/* <a href="#" className="btn theme_btn button_hover">Book Now</a> */}
-                    <Link to={`/rooms/${String(slug).replaceAll(" ","-")}`} href="#" className="btn theme_btn button_hover">Book Now</Link>          
+                    <Link to={`/rooms/${String(slug).replaceAll(" ","-")}`} className="btn theme_btn button_hover">Book Now</Link>          
                 </div>
-                  <a href="#"><h4 className="sec_h4">{name}</h4></a>
+                <Link to={`/rooms/${String(slug).replaceAll(" ","-")}`} className="btn theme_btn button_hover">{name}</Link>          
+
+                  {/* <a href="#"><h4 className="sec_h4">{name}</h4></a> */}
                 <h5>${price}<small>/night</small></h5>
             </div>
             </div>
