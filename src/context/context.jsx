@@ -15,6 +15,7 @@ export default class RoomProvider extends Component {
     loading: true,
     contact: [],
     user: null,
+    Admin: false,
     userlogedin: false,
     //
     type: "all",
@@ -29,6 +30,7 @@ export default class RoomProvider extends Component {
   };
 
   userlogedin = false;
+  Admin = false;
   // aldmanyrooms
   getData = async () => {
     try {
@@ -83,27 +85,30 @@ export default class RoomProvider extends Component {
         return null;
       };
       this.user = cuser();
+
+      if (this.user?.Admin) {
+        this.Admin = true;
+        console.log(this.user.Admin, "FROM THS USER");
+      }
       console.log(this.user, "USER CONTEXT");
 
       this.loginApiCall = async (payload) => {
-        const res = await axios
-          .post("http://127.0.0.1:3500/auth", payload, {
-            withCredentials: true,
-          })
-          .then(alert("welcome"));
+        const res = await axios.post("http://127.0.0.1:3500/auth", payload, {
+          withCredentials: true,
+        });
+        // .then(alert("welcome"));
 
         const apiResponse = await axios
           .get("http://127.0.0.1:3500/refresh", {
             withCredentials: true,
           })
           .then((res) => {
-            this.user = res.data.username;
+            this.user = res.data.user;
+            console.log(this.user, "FROM CONTEXT");
             console.log(res.data, "USER");
             this.userlogedin = true;
-            localStorage.setItem(
-              "userProfile",
-              JSON.stringify(res.data.username)
-            );
+            localStorage.setItem("userProfile", JSON.stringify(res.data.user));
+            localStorage.setItem("token", res.data.accessToken);
           });
 
         return this.userlogedin;
@@ -115,16 +120,21 @@ export default class RoomProvider extends Component {
           withCredentials: true,
         });
         localStorage.removeItem("userProfile");
+        localStorage.removeItem("token");
+        // localStorage.clear();
         this.user = null;
         this.userlogedin = false;
-        console.log(this.user);
-        console.log(this.userlogedin);
+        this.Admin = false;
+        // console.log(this.user);
+        // console.log(this.userlogedin);
       };
       this.handleuser = () => {
         // userlogedin = this.userlogedin;
         return this.userlogedin;
       };
-
+      this.isAdmin = (e) => {
+        return this.Admin;
+      };
       this.setState({
         rooms,
         featuredRooms,
@@ -141,6 +151,7 @@ export default class RoomProvider extends Component {
         apilogin: this.loginApiCall,
         apilogout: this.logoutApiCall,
         userlogedin: this.userlogedin,
+        Admin: this.isAdmin,
         handleuserChange: this.handleuser,
         price: maxPrice,
         maxPrice,

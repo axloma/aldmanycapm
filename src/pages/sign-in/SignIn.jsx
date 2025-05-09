@@ -16,6 +16,11 @@ import { styled } from "@mui/material/styles";
 import ForgotPassword from "./components/ForgotPassword";
 import AppTheme from "../shared-theme/AppTheme";
 import ColorModeSelect from "../shared-theme/ColorModeSelect";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+// import { InputAdornment } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+
 import {
   GoogleIcon,
   FacebookIcon,
@@ -27,6 +32,11 @@ import axios from "axios";
 import { useContext, useState, useEffect } from "react";
 import { RoomContext } from "../../context/context";
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import jwtInterceptor from "../../components/jwtintercept";
+import { jwtDecode } from "jwt-decode";
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { useRef } from "react";
 // import { useEffect } from 'react';
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -76,24 +86,17 @@ export default function SignIn(props) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [userloged, setUserLoged] = useState(null);
+  const [userloged, setUserLoged] = useState(
+    JSON.parse(localStorage.getItem("userProfile"))
+  );
   const navigate = useNavigate();
-
+  const [user, setUser] = useState(null);
+  const [profile, SetProfile] = useState();
   const { apilogin, userlogedin } = useContext(RoomContext);
-  // useEffect(()=>{
-
-  //   setUserLoged(userlogedin)
-  // },[])
-  // console.log(loged);
-  useEffect(() => {
-    const user = localStorage.getItem("userProfile");
-    setUserLoged(user);
-    console.log(user);
-    if (user) {
-      navigate("/profile");
-    }
-  }, [userloged]);
-
+  const [showPassword, SetShowPassword] = useState(false);
+  const handleShowPassword = () => {
+    SetShowPassword((prev) => !prev);
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -101,27 +104,6 @@ export default function SignIn(props) {
   const handleClose = () => {
     setOpen(false);
   };
-
-  // const user = await axios.post("http://127.0.0.1:3500/auth",{user:email,pwd:password},{
-  //     withCredentials:true,
-  //     }).then(()=>{
-  //           alert('WELCOME ')
-  //       }).catch((e)=>{
-  //           console.log(e)
-  //         if (e.response.status == 409 || 401 || 403) {
-  //           alert('Wrong creadential ')
-  //         }
-
-  //       })
-
-  // console.log(user,"FROM LOGIN")
-
-  // console.log({
-  //   email: data.get('email'),
-  //   password: data.get('password'),
-  // });
-
-  // };
 
   const validateInputs = () => {
     const email = document.getElementById("email");
@@ -181,6 +163,44 @@ export default function SignIn(props) {
     }
   };
 
+  const login = useGoogleLogin({
+    // onSuccess: (tokenResponse) => console.log(tokenResponse),
+    // onSuccess: (tokenResponse) => console.log(tokenResponse),
+    onSuccess: (codeResponse) => {
+      // setUser(codeResponse);
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${codeResponse.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${codeResponse.access_token}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+          let dat = res.data;
+          // SetProfile(res.data);
+          // console.log(profile);
+          localStorage.setItem("userProfile", JSON.stringify(res.data));
+          localStorage.setItem(
+            "token",
+            JSON.stringify(codeResponse.access_token)
+          );
+
+          navigate("/");
+        })
+        .catch((err) => console.log(err));
+    },
+    onError: (error) => console.log("Login Failed:", error),
+  });
+
+  // log out function to log the user out of google and set the profile array to null
+  const logOut = () => {
+    googleLogout();
+    setProfile(null);
+  };
   return (
     <>
       {!userloged && (
@@ -249,7 +269,7 @@ export default function SignIn(props) {
                         helperText={passwordErrorMessage}
                         name="password"
                         placeholder="••••••"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         id="password"
                         autoComplete="current-password"
                         autoFocus
@@ -258,6 +278,15 @@ export default function SignIn(props) {
                         variant="outlined"
                         color={passwordError ? "error" : "primary"}
                       />
+                      <IconButton onClick={handleShowPassword}>
+                        {showPassword ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                      </IconButton>
+                      {/* <InputAdornment position="end"> */}
+                      {/* </InputAdornment> */}
                     </FormControl>
                     <FormControlLabel
                       control={<Checkbox value="remember" color="primary" />}
@@ -289,10 +318,25 @@ export default function SignIn(props) {
                     <Button
                       fullWidth
                       variant="outlined"
-                      onClick={() => alert("Sign in with Google")}
+                      onClick={login}
                       startIcon={<GoogleIcon />}
                     >
                       Sign in with Google
+                      {/* <GoogleLogin
+                        onSuccess={async (credentialResponse) => {
+                          console.log(credentialResponse);
+                          const result = await credentialResponse?.profileObj;
+                          console.log(result);
+                          const creadentialDecoded = await jwtDecode(
+                            credentialResponse.credential
+                          );
+                          // console.log(credentialResponse);
+                          console.log(creadentialDecoded);
+                        }}
+                        onError={() => {
+                          console.log("Login Failed");
+                        }}
+                      /> */}
                     </Button>
                     <Button
                       fullWidth

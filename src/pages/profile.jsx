@@ -39,6 +39,10 @@ const profile = () => {
 
   const info = async () => {
     const users = await axios.get("http://127.0.0.1:3500/users", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       withCredentials: true,
     });
     console.log(users);

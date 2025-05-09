@@ -7,28 +7,6 @@ import { RoomContext } from "../../../context/context";
 import { useContext, useEffect, useState } from "react";
 import Checkoutrooms from "../../../components/checkoutrooms";
 import { nanoid } from "nanoid";
-const products = [
-  {
-    name: "Professional plan",
-    desc: "Monthly subscription",
-    price: "$15.00",
-  },
-  {
-    name: "Dedicated support",
-    desc: "Included in the Professional plan",
-    price: "Free",
-  },
-  {
-    name: "Hardware",
-    desc: "Devices needed for development",
-    price: "$69.99",
-  },
-  {
-    name: "Landing page template",
-    desc: "License",
-    price: "$49.99",
-  },
-];
 
 // interface InfoProps {
 //   totalPrice: string;
@@ -74,7 +52,12 @@ export default function Info({ totalPrice }) {
       <List disablePadding>
         {rooms.map((room) => {
           if (bookitem[room.id] != 0) {
-            const info = `NUMER OF ROOM: ${bookitem[room.id].room} ADULT: ${bookitem[room.id].adult} CHILDERN: ${bookitem[room.id].childern} TOTAL PRICE:  ${room.price * bookitem[room.id].room} `;
+            const info = `NUMER OF ROOM: ${bookitem[room.id].room} 
+                          ADULT: ${bookitem[room.id].adult} 
+                          CHILDERN: ${bookitem[room.id].childern} 
+                          FROM: ${bookitem[room.id].from} 
+                          TO: ${bookitem[room.id].to} 
+                          TOTAL PRICE:  ${room.price * bookitem[room.id].room} `;
             return (
               <div key={nanoid()}>
                 <Checkoutrooms

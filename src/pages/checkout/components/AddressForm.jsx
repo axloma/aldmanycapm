@@ -5,7 +5,7 @@ import FormLabel from "@mui/material/FormLabel";
 import Grid from "@mui/material/Grid";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { styled } from "@mui/material/styles";
-
+import { useState } from "react";
 // console.log(userlogedin, "FROM REGISTER");
 
 // const navigate = useNavigate();
@@ -24,6 +24,7 @@ export default function AddressForm() {
   const [nameErrorMessage, setNameErrorMessage] = React.useState("");
   const [phonelError, setPhoneError] = React.useState(false);
   const [phoneErrorMessage, setPhoneErrorMessage] = React.useState("");
+
   // const { apilogin, userlogedin, handleuserChange } = useContext(RoomContext);
   // const [userloged, setUserLoged] = useState(null);
 
@@ -54,18 +55,19 @@ export default function AddressForm() {
       setPhoneErrorMessage("");
     }
 
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
-    }
+    // if (!password.value || password.value.length < 6) {
+    //   setPasswordError(true);
+    //   setPasswordErrorMessage("Password must be at least 6 characters long.");
+    //   isValid = false;
+    // } else {
+    //   setPasswordError(false);
+    //   setPasswordErrorMessage("");
+    // }
 
     if (!name.value || name.value.length < 1) {
       setNameError(true);
       setNameErrorMessage("Name is required.");
+
       isValid = false;
     } else {
       setNameError(false);

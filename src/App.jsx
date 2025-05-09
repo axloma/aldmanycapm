@@ -4,14 +4,14 @@ import "./App.css";
 // import { Helmet } from 'react-helmet';
 import Home from "./pages/home";
 import Contact from "./pages/contact";
-import Nave from "./components/nave";
-import Navet from "./components/navetwo";
+// import Nave from "./components/nave";
+import Nave from "./components/navetwo";
 import Footer from "./components/footer";
 import About from "./pages/about";
 import Accomodation from "./pages/accomodation";
 import Gallery from "./pages/gallery";
-import Blog from "./pages/blog";
-import Singleblog from "./pages/singleblog";
+// import Blog from "./pages/blog";
+// import Singleblog from "./pages/singleblog";
 import SingleRoom from "./pages/singleroom";
 import Error from "./pages/error";
 // import { RoomProvider } from './context';
@@ -28,21 +28,49 @@ import SignUp from "./pages/sign-up/SignUp";
 import SignIn from "./pages/sign-in/SignIn";
 import Profile from "./pages/profile";
 import { BookContextprovider } from "./context/bookcontext";
-import Dashboard from "./dashboard/dashboard";
+// import Dashboard from "./dashboard/dashboard";
 import { useLocation } from "react-router-dom";
 import Mybooking from "./pages/mybooking";
+import { usePathname } from "./use-pathname";
+import { useEffect, useContext } from "react";
+import AdminDash from "./pages/admin/dashboard";
+import { RoomContext } from "./context/context";
+function useScrollToTop() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function App() {
   // const value = useContext(RoomProvider)
+  const { userlogedin, handleuserChange, apilogout, Admin } =
+    useContext(RoomContext);
   // console.log(value)
-
-  const isAdmin = useLocation().pathname.includes("aldamanyAdmin");
+  console.log(Admin, "ADMIn");
+  useScrollToTop();
+  const location = useLocation();
+  const cuser = () => {
+    let userProfile = localStorage.getItem("userProfile");
+    if (userProfile) {
+      return JSON.parse(userProfile);
+    }
+    return null;
+  };
+  const userProfile = cuser();
+  console.log(userProfile);
+  const isAdmin = userProfile?.Admin;
+  console.log(isAdmin);
   return (
     <>
+      {" "}
       {/* <BrowserRouter> */}
-      {!isAdmin && <Navet />}
+      {!isAdmin && <Nave />}
+      {isAdmin && <AdminDash />}
       {/* <Nave/> */}
-
       {/* <RoomProvicer> */}
       <Routes>
         <Route exact path="/" Component={Home} />
@@ -53,8 +81,8 @@ function App() {
         <Route exact path="/accomodation" element={<Accomodation />} />
         <Route exact path="/rooms/:slug" Component={SingleRoom} />
         <Route exact path="/gallery" element={<Gallery />} />
-        <Route exact path="/blog" element={<Blog />} />
-        <Route exact path="/singleBlog" element={<Singleblog />} />
+        {/* <Route exact path="/blog" element={<Blog />} /> */}
+        {/* <Route exact path="/singleBlog" element={<Singleblog />} /> */}
         <Route exact path="/checkout" element={<Checkout />} />
         {/* <Route exact path="/test" element={<BookContextprovider />} /> */}
         {/* 
@@ -63,14 +91,15 @@ function App() {
         <Route exact path="/reg" element={<SignUp />} />
         <Route exact path="/login" element={<SignIn />} />
         <Route exact path="/profile" element={<Profile />} />
-        <Route exact path="/dashboard" element={<Dashboard />} />
+
+        {/* <Route exact path="/dashboard" element={<Dashboard />} /> */}
         <Route exact path="/mybooking" element={<Mybooking />} />
+        {/* <Route exact path="/admindash" element={<AdminDash />} /> */}
 
         <Route path="*" element={<Error />} />
       </Routes>
       {/* </RoomProvicer> */}
-      <Footer />
-
+      {!isAdmin && <Footer />}
       {/* </BrowserRouter> */}
     </>
   );

@@ -1110,3 +1110,187 @@ export default Room;
             <script src="vendors/lightbox/simpleLightbox.min.js"></script>
             <script src="js/custom.js"></script> */}
         </Helmet>
+
+
+
+    ////////////////////////useef
+
+    // useEffect(()=>{
+
+  //   setUserLoged(userlogedin)
+  // },[])
+  // console.log(loged);
+  // useEffect(() => {
+  //   // const user = localStorage.getItem("userProfile");
+  //   // setUserLoged(user);
+  //   // if (user) {
+  //   //   navigate("/");
+  //   // }
+  //   if (user) {
+  //     // console.log(user);
+  //     axios
+  //       .get(
+  //         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${user.access_token}`,
+  //             Accept: "application/json",
+  //           },
+  //         }
+  //       )
+  //       .then((res) => {
+  //         setProfile(res.data);
+  //         localStorage.setItem("userProfile", JSON.stringify([res.data]));
+  //         console.log(profile);
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
+  // }, [user, userloged]);
+ // const user = await axios.post("http://127.0.0.1:3500/auth",{user:email,pwd:password},{
+  //     withCredentials:true,
+  //     }).then(()=>{
+  //           alert('WELCOME ')
+  //       }).catch((e)=>{
+  //           console.log(e)
+  //         if (e.response.status == 409 || 401 || 403) {
+  //           alert('Wrong creadential ')
+  //         }
+
+  //       })
+
+  // console.log(user,"FROM LOGIN")
+
+  // console.log({
+  //   email: data.get('email'),
+  //   password: data.get('password'),
+  // });
+
+  // };
+
+
+  // const status = async () => {
+  //   if (user) {
+  //     await axios
+  //       .get(
+  //         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${user.access_token}`,
+  //             Accept: "application/json",
+  //           },
+  //         }
+  //       )
+  //       .then((res) => {
+  //         setProfile(res.data);
+  //         // localStorage.setItem("userProfile", JSON.stringify([res.data]));
+  //         console.log(profile);
+  //         dispatch({ type: "AUTH", data: { profile } });
+  //         navigate("/");
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
+  // };
+
+
+      // if (user) {
+      //   axios
+      //     .get(
+      //       `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+      //       {
+      //         headers: {
+      //           Authorization: `Bearer ${user.access_token}`,
+      //           Accept: "application/json",
+      //         },
+      //       }
+      //     )
+      //     .then((res) => {
+      //       console.log(res.data);
+      //       setProfile(res.data);
+      //       // localStorage.setItem("userProfile", JSON.stringify([res.data]));
+      //       console.log(profile, "PROFILE");
+      //       let pro = res.data;
+      //       if (profile) {
+      //         dispatch({ type: "AUTH", data: { pro } });
+      //         navigate("/");
+      //       }
+      //     })
+      //     .catch((err) => console.log(err));
+      // }
+      // await status();
+      // setUserLoged(true);
+      // console.log(user);
+
+
+
+       useEffect(() => {
+    async function get() {
+      if (user) {
+        await axios
+          .get(
+            `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+            {
+              headers: {
+                Authorization: `Bearer ${user.access_token}`,
+                Accept: "application/json",
+              },
+            }
+          )
+          .then(async (res) => {
+            console.log(res.data);
+            let dat = res.data;
+            SetProfile((prev) => dat);
+            console.log(profile);
+            // localStorage.setItem("userProfile", JSON.stringify([res.data]));
+            console.log(profile);
+          })
+          .catch((err) => console.log(err));
+      }
+      if (profile) {
+        dispatch({ type: "AUTH", data: { profile } });
+
+        navigate("/");
+      }
+      console.log(profile);
+    }
+    get();
+  }, [user]);
+
+
+
+
+
+    // const delcus = async (id) => {
+  //   console.log(localStorage.getItem("token"));
+  //   const token = localStorage.getItem("token");
+  //   setLoading(true);
+  //   const cus = await axios
+  //     .delete(`http://127.0.0.1:3500/customers/${id}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       withCredentials: true,
+  //     })
+  //     .then(() => {
+  //       getusers();
+  //       setLoading(false);
+  //       // Setusers(
+  //       //   users.filter((item, i) => {
+  //       //     item._id !== id;
+  //       //   })
+  //       // );
+  //     });
+  // };
+  // async function getusers() {
+  //   await axios
+  //     .get("http://127.0.0.1:3500/booking", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       Setusers(res.data);
+  //     });
+  // }

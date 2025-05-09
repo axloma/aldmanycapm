@@ -40,7 +40,7 @@ export default function SingleRoom() {
     return (
       <div className="error">
         <h3> no such room could be found...</h3>
-        <Link to="/rooms" className="btn-primary">
+        <Link to="/accomodation" className="btn-primary">
           back to rooms
         </Link>
       </div>

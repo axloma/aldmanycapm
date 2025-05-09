@@ -18,9 +18,10 @@ import { Link } from "react-router-dom";
 import { borderRadius, textAlign } from "@mui/system";
 import { useContext, useState } from "react";
 import { RoomContext } from "../context/context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import logo from "../assets/logo.jpeg";
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import { Translate } from "react-bootstrap-icons";
 const pages = {
   HOME: "/",
@@ -30,7 +31,8 @@ const pages = {
   contact: "contact",
 };
 const settings = {
-  Profile: "profile",
+  Profile: "/mybooking",
+
   Account: "account",
   Dashboard: "userdashboard",
 };
@@ -45,17 +47,38 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   // console.log(userlogedin)
-  const { userlogedin, handleuserChange, apilogout } = useContext(RoomContext);
+  const { userlogedin, handleuserChange, apilogout, Admin } =
+    useContext(RoomContext);
   console.log(typeof handleuserChange);
   const [thisUserLoged, SetThisUserLoged] = useState(null);
+  const navigate = useNavigate();
+  const [user, SetUser] = useState(
+    JSON.parse(localStorage.getItem("userProfile"))
+  );
+  const location = useLocation();
 
+  // const dispatch = useDispatch();
+  console.log(user);
+  useEffect(() => {
+    // const token = user?.token;
+    // console.log("hi");
+    // SetThisUserLoged(JSON.parse(localStorage.getItem("userProfile")));
+    console.log(thisUserLoged);
+    SetUser(JSON.parse(localStorage.getItem("userProfile")));
+
+    // console.log(user[0].picture, "pic");
+    // SetThisUserLoged(handleuserChange);
+  }, [location]);
+
+  console.log(user, "NVT");
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-    console.log(handleuserChange(), "HANDLER");
+    // console.log(handleuserChange(), "HANDLER");
     SetThisUserLoged(handleuserChange());
+    SetThisUserLoged(user);
   };
 
   const handleCloseNavMenu = () => {
@@ -86,13 +109,19 @@ function ResponsiveAppBar() {
     },
   };
   function logout() {
-    apilogout();
+    if (user?.verified_email) {
+      console.log(user, "LOGOUT");
+      googleLogout();
+      localStorage.removeItem("userProfile");
+      localStorage.removeItem("token");
+      SetUser(null);
+      navigate("/");
+    } else {
+      apilogout();
+      SetUser(null);
+      navigate("/");
+    }
   }
-  useEffect(() => {
-    console.log("hi");
-    SetThisUserLoged(localStorage.getItem("userProfile"));
-    // SetThisUserLoged(handleuserChange);
-  }, [thisUserLoged]);
 
   return (
     <AppBar
@@ -101,7 +130,10 @@ function ResponsiveAppBar() {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: "", md: "flex" }, mr: 1, src: "./" }} /> */}
+          {/* <AdbIcon
+            sx={{ display: { xs: "", md: "flex" }, mr: 1, src: `${logo}` }}
+            src={logo}
+          /> */}
           <img
             className="nav-logo"
             src={logo}
@@ -158,9 +190,19 @@ function ResponsiveAppBar() {
                   <Typography sx={{ textAlign: 'center' }} >{page}</Typography>
                 </MenuItem>
               ))} */}
+              {Object.keys(pages).map((item, i) => (
+                <Link key={item} to={pages[item]}>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography sx={{ textAlign: "center" }}>
+                      {" "}
+                      {item}
+                    </Typography>
+                  </MenuItem>
+                </Link>
+              ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
           <Typography
             variant="h5"
             noWrap
@@ -177,7 +219,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            {/* LOGO */}
           </Typography>
           <Box
             sx={{
@@ -202,9 +244,14 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            {/* <Tooltip title="Open settings"> */}
+            <Tooltip title={user ? user?.profile?.email || user?.email : user}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src={thisUserLoged ? avatar : ava} />
+                {/* <Avatar alt="Remy Sharp" src={thisUserLoged ? avatar : ava} /> */}
+                <Avatar
+                  alt="Remy Sharp"
+                  src={user ? user?.picture || avatar : user}
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -231,26 +278,35 @@ function ResponsiveAppBar() {
                   </Typography>
                 </MenuItem>
               ))} */}
-              {thisUserLoged && (
+              {user && (
                 <div>
-                  <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography sx={{ textAlign: "center" }}>
-                      <Link to="/profile"> Profile</Link>
-                    </Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography sx={{ textAlign: "center" }}>
-                      <Link to="/profile"> Account</Link>
-                    </Typography>
-                  </MenuItem>
-                  <Link to="/contact">
+                  <Link to="/mybooking">
+                    {" "}
                     <MenuItem onClick={handleCloseUserMenu}>
                       <Typography sx={{ textAlign: "center" }}>
-                        Send Message
+                        {" "}
+                        Profile{" "}
                       </Typography>
                     </MenuItem>
                   </Link>
-                  <Link to="/" onClick={apilogout}>
+
+                  <Link to="/profile">
+                    {" "}
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography sx={{ textAlign: "center" }}>
+                        Account{" "}
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Link to="/contact">
+                      <Typography sx={{ textAlign: "center" }}>
+                        Send Message
+                      </Typography>
+                    </Link>
+                  </MenuItem>
+                  <Link to="/" onClick={logout}>
                     <MenuItem onClick={handleCloseUserMenu}>
                       <Typography sx={{ textAlign: "center" }}>
                         {" "}
@@ -260,7 +316,7 @@ function ResponsiveAppBar() {
                   </Link>
                 </div>
               )}
-              {!thisUserLoged && (
+              {!user && (
                 <div>
                   <Link to="/login">
                     <MenuItem onClick={handleCloseUserMenu}>

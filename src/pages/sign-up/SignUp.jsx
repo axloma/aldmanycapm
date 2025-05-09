@@ -146,7 +146,15 @@ export default function SignUp(props) {
     const email = data.get("email");
     const phone = data.get("phone");
     const password = data.get("password");
-    const payload = { user: name, email: email, pwd: password, phone: phone };
+    const Cpassword = data.get("passwordC");
+
+    const payload = {
+      user: name,
+      email: email,
+      pwd: password,
+      Cpassword,
+      phone: phone,
+    };
     console.log(payload);
     try {
       const user = await axios.post("http://127.0.0.1:3500/register", payload);
@@ -164,6 +172,9 @@ export default function SignUp(props) {
 
       if (e.status === 409) {
         alert("Email already exists ");
+      }
+      if (e.status === 400) {
+        alert(e.response.data.message);
       }
     }
 
@@ -276,6 +287,24 @@ export default function SignUp(props) {
                         required
                         fullWidth
                         name="password"
+                        placeholder="••••••"
+                        type="password"
+                        id="password"
+                        autoComplete="new-password"
+                        variant="outlined"
+                        error={passwordError}
+                        helperText={passwordErrorMessage}
+                        color={passwordError ? "error" : "primary"}
+                      />
+                    </FormControl>
+                    <FormControl>
+                      <FormLabel htmlFor="passwordC">
+                        Confirm Password
+                      </FormLabel>
+                      <TextField
+                        required
+                        fullWidth
+                        name="passwordC"
                         placeholder="••••••"
                         type="password"
                         id="password"

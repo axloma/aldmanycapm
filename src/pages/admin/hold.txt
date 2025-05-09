@@ -1,0 +1,58 @@
+import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import Transication from "./allreservation";
+import { nanoid } from "nanoid";
+const dashboard = () => {
+  const [item, SetItem] = useState(null);
+  const items = {
+    transaction: <Transication />,
+    users: <p>item</p>,
+    Customers: <p>item</p>,
+    addUser: <p>item</p>,
+  };
+  const [value, SetValue] = useState(null);
+  return (
+    <>
+      {" "}
+      <div
+        style={{
+          backgroundColor: "black",
+          position: "relative",
+          top: "0",
+          height: "10vh",
+          width: "100vw",
+          display: "flex",
+          flexWrap: "wrap",
+          flex: "1",
+          gap: "10px",
+        }}
+      >
+        {Object.keys(items).map((item, i) => {
+          return (
+            <Button
+              key={nanoid()}
+              variant="contained"
+              // endIcon={<ChevronRightRoundedIcon />}
+              // loading={loading}
+              // loadingPosition="center"
+              // onClick={subm}
+              sx={{
+                width: { xs: "100%", sm: "fit-content" },
+                backgroundColor: "blue",
+                cursor: "pointer",
+                display: "flex",
+                // display: `${dispnex}`,
+              }}
+              onClick={() => SetValue(items[item])}
+            >
+              {item}
+            </Button>
+          );
+        })}
+      </div>
+      {value && value}
+    </>
+  );
+};
+
+export default dashboard;

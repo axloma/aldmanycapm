@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import Booking from "../components/booking";
-import FeaturedRooms from "../components/FeaturedRooms";
+// import FeaturedRooms from "../components/FeaturedRooms";
 import RoomsContainer from "../components/RoomsContainer";
-import Spinner from "../components/loading";
+// import Spinner from "../components/loading";
 import { Link } from "react-router-dom";
 // import Cookies from 'js-cookie';
 const accomodation = () => {
@@ -53,7 +53,7 @@ const accomodation = () => {
       {/* <!--================ Accomodation Area  =================-->
         <!--================Booking Tabel Area =================--> */}
 
-      <Booking />
+      {/* <Booking /> */}
       {/* <!--================Booking Tabel Area  =================-->
         <!--================ Accomodation Area  =================--> */}
       {/* //TODO:  insert rooms */}

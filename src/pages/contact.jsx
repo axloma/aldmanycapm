@@ -1,9 +1,16 @@
+"use client";
 import React from "react";
 import { useContext } from "react";
 import { RoomContext } from "../context/context";
 import { Link } from "react-router-dom";
+import { useRef } from "react";
+import POST from "../api/email/apiemail";
+// require("dotenv").config();
+// import { Email } from "./email";
+import emailjs from "@emailjs/browser";
 const contact = () => {
   const { contact } = useContext(RoomContext);
+  const form = useRef();
   console.log(contact == "");
   // console.log(contact)
   // console.log(contact[0].country,"FROM CONTACT")
@@ -20,6 +27,35 @@ const contact = () => {
     supportemail = contact[0].supportemail;
     Businesshours = `from ${contact[0].businesshours} to ${contact[0].businesshoursto} `;
   }
+  const email = async (e) => {
+    e.preventDefault();
+    // const data = new FormData(document.getElementById("contactForm"));
+    // const name = data.get("name");
+    // const email = data.get("email");
+    // const subject = data.get("subject");
+    // const msg = data.get("message");
+    // console.log(name, email, subject, msg);
+
+    emailjs
+      .sendForm(
+        process.env.REACT_APP_ServiceID,
+        process.env.REACT_APP_TemplateID,
+        form.current,
+        {
+          publicKey: process.env.REACT_APP_PUBLICKEY,
+        }
+      )
+      .then(
+        () => {
+          console.log("SUCCESS!");
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+        }
+      );
+
+    // await fetch("/api/email", { method: "POST" });
+  };
 
   return (
     <>
@@ -97,11 +133,14 @@ const contact = () => {
               </div>
             </div>
             <div className="col-md-9">
+              {/* email form/////////////////////////////////////////////////////  */}
               <form
                 className="row contact_form"
-                action="contact_process.php"
-                method="post"
+                // action="contact_process.php"
+                // action={email}
                 id="contactForm"
+                ref={form}
+                onSubmit={email}
                 noValidate="novalidate"
               >
                 <div className="col-md-6">
@@ -110,7 +149,7 @@ const contact = () => {
                       type="text"
                       className="form-control"
                       id="name"
-                      name="name"
+                      name="user_name"
                       placeholder="Enter your name"
                     />
                   </div>
@@ -119,7 +158,7 @@ const contact = () => {
                       type="email"
                       className="form-control"
                       id="email"
-                      name="email"
+                      name="user_email"
                       placeholder="Enter email address"
                     />
                   </div>

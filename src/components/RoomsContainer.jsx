@@ -6,22 +6,21 @@ import RoomsList from "./RoomsList";
 
 function RoomContainer({ context }) {
   const { loading, sortedRooms, rooms } = context;
-  console.log (rooms)
+  console.log(rooms);
   if (loading) {
     return <Loading />;
   }
   return (
-    <section  className="accomodation_area section_gap">
-      <div  className="container">
-        <div  className="section_title text-center">
-            <h2  className="title_color">{"titlex"}</h2>
-            {/* <p>{props.desc}</p> */}
+    <section className="accomodation_area section_gap">
+      <div className="container">
+        <div className="section_title text-center">
+          <h2 className="title_color">{"All Rooms "}</h2>
+          {/* <p>{props.desc}</p> */}
         </div>
-      <div  className="row accomodation_two">
-    
-        <RoomsFilter rooms={rooms} />
-        <RoomsList rooms={sortedRooms} />
-      </div>
+        <div className="row accomodation_two">
+          <RoomsFilter rooms={rooms} />
+          <RoomsList rooms={sortedRooms} />
+        </div>
       </div>
     </section>
   );

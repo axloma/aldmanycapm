@@ -5,12 +5,16 @@ import App from "./App.jsx";
 import { BrowserRouter as Router } from "react-router-dom";
 import { RoomProvider } from "./context/context";
 import { BookContextprovider } from "./context/bookcontext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
   <RoomProvider>
     <Router>
-      <App />
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLECLIENTID}>
+        <App />.
+      </GoogleOAuthProvider>
+      ;
     </Router>
   </RoomProvider>
   // </StrictMode>,

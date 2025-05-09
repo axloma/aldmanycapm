@@ -21,38 +21,116 @@ import SitemarkIcon from "./components/SitemarkIcon";
 import AppTheme from "../shared-theme/AppTheme";
 import React from "react";
 import ColorModeIconDropdown from "../shared-theme/ColorModeIconDropdown";
-// import { RoomContext } from "./context/context";
 import { RoomContext } from "../../context/context";
-import { useContext, useEffect, useState } from "react";
-import Checkoutrooms from "../../components/checkoutrooms";
+import { useContext, useEffect, useState, useRef } from "react";
 import { nanoid } from "nanoid";
-
+import { format, isFuture, isPast } from "date-fns";
 import axios from "axios";
-const steps = ["Shipping address", "Payment details", "Review your order"];
+import validator from "validator";
 
+import "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import {
+  PaymentElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+const stripePromise = loadStripe(
+  "pk_test_51RHKpLCTcEpFKYaOPfD95CLeRGsk8X5ohRgNkosKg75O8vKTOmQTXjDtzFEqKGUV5MLxtugGfAr33bjH7sdZLTN400MBiYh4ik"
+);
+
+const steps = [
+  "Personal Information",
+  "Payment details",
+  "Reservation details",
+];
+let bookingpayload;
+let userid;
+let bookedroom;
+let useremail;
 function subm() {}
 
+var clientSecrete;
+var ref;
+
+var [paymentstatus, setPaymentstatuse] = [];
+var [paymentinfo, setpaymentinfo] = "";
+var dispnex = "";
 function getStepContent(step) {
+  ref = useRef();
+  const [confid, seconfId] = useState(null);
   switch (step) {
     case 0:
+      dispnex = "";
       return (
         <form id="form-step1" onSubmit={subm}>
           {" "}
           <AddressForm />
-          <button type="submit">sub</button>
         </form>
       );
     case 1:
+      // const stripe = useStripe();
+      // const elements = useElements();
+      dispnex = "none";
       return (
-        <form id="form-step2" onSubmit={subm}>
-          <PaymentForm />
-        </form>
+        <div>
+          <Elements
+            stripe={stripePromise}
+            options={{ clientSecret: clientSecrete }}
+          >
+            {/* <PaymentElement /> */}
+
+            <PaymentForm
+              ref={ref}
+              setPaymentstatuse={setPaymentstatuse}
+              setpaymentinfo={setpaymentinfo}
+              userid={userid}
+              bookedroom={bookedroom}
+              useremail={useremail}
+              seconfId={seconfId}
+            />
+          </Elements>
+        </div>
       );
     case 2:
-      return <Review />;
+      const subj = "YOUR PAYMENT HAS Verified";
+      const msg = `<div style="background-color:black ; text-decoration:none ;text-align:center ;position:relative;height:14vh"><h1><a  href="https://www.aldamanycamp.info" style="text-decoration: none ;cursor:pointer">aldamanycamp.info</a></h1><h2><hr/>YOUR CONFIRMATION ID: ${confid}</h2></div>`;
+      const automail = async () => {
+        const result = await axios
+          .post(
+            "http://127.0.0.1:3500/automail",
+            {
+              useremail,
+              subj,
+              msg,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+            }
+          )
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      };
+      automail();
+      return (
+        <Review
+          bookitemr={bookingpayload}
+          confid={confid}
+          useremail={useremail}
+        />
+      );
     default:
       throw new Error("Unknown step");
   }
+  return <></>;
 }
 export default function Checkout(props) {
   const [emailError, setEmailError] = React.useState(false);
@@ -61,15 +139,37 @@ export default function Checkout(props) {
   const [nameErrorMessage, setNameErrorMessage] = React.useState("");
   const [phonelError, setPhoneError] = React.useState(false);
   const [phoneErrorMessage, setPhoneErrorMessage] = React.useState("");
-  // const { apilogin, userlogedin, handleuserChange } = useContext(RoomContext);
-  // const [userloged, setUserLoged] = useState(null);
+  const [cardNumberError, setCardNumberError] = useState(false);
+  const [expError, setexpError] = useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [message, setMessage] = useState(null);
+  // const [dispnex, setDisplayNext] = useState("");
   const { addToCart, removeFromCart, bookitem, rooms } =
     useContext(RoomContext);
-  const room = rooms.map((room) => {
+  // const stripe = useStripe();
+  // const elements = useElements();
+  [paymentstatus, setPaymentstatuse] = useState(false);
+  [paymentinfo, setpaymentinfo] = useState([]);
+  let price = 0;
+  let Price = rooms.map((room) => {
     if (bookitem[room.id] != 0) {
-      return room;
+      price =
+        parseInt(price) + parseInt(`${room.price * bookitem[room.id].room}`);
+
+      return price;
     }
   });
+
+  // const { apilogin, userlogedin, handleuserChange } = useContext(RoomContext);
+  // const [userloged, setUserLoged] = useState(null);
+
+  const room = rooms.map((room) => {
+    if (bookitem[room.id] != 0) {
+      let info = { bookitem, room };
+      return info;
+    }
+  });
+  bookedroom = room;
 
   const validateInputs = (e) => {
     // e.preventDefault()
@@ -82,6 +182,7 @@ export default function Checkout(props) {
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
       setEmailErrorMessage("Please enter a valid email address.");
+      setMessage(emailErrorMessage);
       isValid = false;
     } else {
       setEmailError(false);
@@ -91,6 +192,7 @@ export default function Checkout(props) {
     if (!phone.value || phone.value.length < 8) {
       setPhoneError(true);
       setPhoneErrorMessage("phone must be at least 8 characters long.");
+      setMessage(phoneErrorMessage);
       isValid = false;
     } else {
       setPhoneError(false);
@@ -100,6 +202,7 @@ export default function Checkout(props) {
     if (!name.value || name.value.length < 1) {
       setNameError(true);
       setNameErrorMessage("Name is required.");
+      setMessage(nameErrorMessage);
       isValid = false;
     } else {
       setNameError(false);
@@ -112,22 +215,22 @@ export default function Checkout(props) {
   const [userId, setUserId] = useState();
   const subm = async (e) => {
     if (activeStep == 0) {
-      alert("welcome");
       let valid = validateInputs();
-
-      if (nameError) {
-        e.preventDefault();
-        console.log("ERROR");
-        alert(nameErrorMessage);
-        return;
-      } else if (emailError) {
-        alert(emailErrorMessage);
-        return;
-      } else if (phoneErrorMessage) {
-        alert(phoneErrorMessage);
+      if (!valid) {
+        if (nameError) {
+          e.preventDefault();
+          console.log("ERROR");
+          alert(nameErrorMessage);
+          return;
+        } else if (emailError) {
+          alert(emailErrorMessage);
+          return;
+        } else if (phonelError) {
+          alert(phoneErrorMessage);
+          return;
+        }
         return;
       }
-
       const data = new FormData(document.getElementById("form-step1"));
 
       const f = data.get("first-name");
@@ -136,37 +239,142 @@ export default function Checkout(props) {
       const phone = data.get("phone");
       // const password = "defaultaldamanypassword";
       const username = `${f} ${l}`;
-      const payload = { user: username, email: email, phone: phone };
-      console.log(payload);
-      const user = await axios
 
-        .post("http://127.0.0.1:3500/register/customer", payload)
+      const payload = {
+        user: username,
+        email: email,
+        phone: phone,
+        amount: Number(price),
+      };
+      console.log(payload);
+      // let clientSecrete;
+      console.log(price, "priceis");
+      setLoading(true);
+      const user = await axios
+        .post("http://127.0.0.1:3500/register/customer", payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
         .then((res) => {
+          setLoading(false);
           console.log(res.data.id, "from payload");
           // userId = res.data.id;
           setUserId(res.data.id);
+          userid = res.data.id;
+          clientSecrete = res.data.clientSecret;
+          console.log(clientSecrete, "from payload");
+          setMessage(null);
           setActiveStep(activeStep + 1);
+          useremail = email;
           // userpayload = payload;
+        })
+        .catch((e) => {
+          setLoading(false);
+          setMessage(e.response.data.message);
+          window.scrollTo(0, 0);
+          // console.log(e.response.data.message);
         });
+      console.log(user);
+      // if (!user) {
+      //   throw new Error(user, "failed to complete ");
+      // }
       // console.log(user);
     }
     if (activeStep == 1) {
-      const booking = new FormData(document.getElementById("form-step2"));
-      const bookingpayload = {};
-      alert("welcome");
-      const confirmation = await axios
-        .post("http://127.0.0.1:3500/register/booking", {
-          user: userId,
-          room: room,
-          payment: room,
-        })
-        .then((res) => {
-          console.log(res.data.confid);
-          setActiveStep(activeStep + 1);
-        });
-      // console.log(user);
+      // const booking = new FormData(document.getElementById("form-step2"));
+      // console.log(ref, "ref");
+      // ref.current.click();
+      // console.log(booking.get("SUB"));
+      // booking = useController({
+      //   control,
+      //   name: "number",
+      //   rules: {
+      //     required: "Can't be blank",
+      //     minLength: {
+      //       value: 19,
+      //       message: "Incomplete card number",
+      //     },
+      //     pattern: {
+      //       value: /^(?=.*\d)[\d ]+$/,
+      //       message: "Wrong format, numbers only",
+      //     },
+      //   },
+      // });
+      // const cardname = booking.get("card-name");
+      // const cardnumber = booking.get("card-number");
+      // const cvv = booking.get("cvv");
+      // let cardexp = booking.get("card-expiration");
+      // console.log(cardname, cardnumber, cardexp, cvv);
+      // let isValid = true;
+      // if (!cardname || !cardnumber || !cvv || !cardexp) {
+      //   isValid = false;
+      //   alert("allfield must");
+      //   return;
+      // }
+      // let isValidCard = validator.isCreditCard(cardnumber);
+      // if (!cardnumber || !isValidCard) {
+      //   setCardNumberError(true);
+      //   alert("cardNumberError");
+      //   isValid = false;
+      //   return;
+      // } else {
+      //   setCardNumberError(false);
+      //   isValid = true;
+      // }
+      // bookingpayload = {
+      //   cardname: cardname,
+      //   cardnumber: cardnumber,
+      //   cvv: cvv,
+      //   cardexp: cardexp,
+      // };
+      // console.log(bookingpayload);
+      // if (isValid) {
+      //   const confirmation = await axios
+      //     .post("http://127.0.0.1:3500/register/booking", {
+      //       user: userId,
+      //       room: room,
+      //       payment: room,
+      //     })
+      //     .then((res) => {
+      //       console.log(res.data.confid);
+      //       setActiveStep(activeStep + 1);
+      //     });
+      // }
+      // ref.current.click();
+      // if (paymentstatus) {
+      // }
+      setDisplayNext("none");
+
+      setActiveStep(activeStep + 1);
     }
   };
+  useEffect(() => {
+    if (paymentstatus) {
+      setActiveStep(activeStep + 1);
+    }
+  }, [paymentstatus]);
+  // useEffect(() => {
+  //   if (paymentstatus) {
+  //     console.log(paymentstatus, "CHECKOUT");
+  //     const add = async () => {
+  //       const confirmation = await axios
+  //         .post("http://127.0.0.1:3500/register/booking", {
+  //           user: userId,
+  //           room: room,
+  //           payment: paymentinfo,
+  //         })
+  //         .then((res) => {
+  //           console.log(res.data.confid);
+  //           setActiveStep(activeStep + 1);
+  //         });
+  //       console.log(paymentinfo);
+  //       console.log(confirmation);
+  //       bookingpayload = confirmation;
+  //       return confirmation;
+  //     };
+  //   }
+  // }, [paymentstatus]);
 
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -174,19 +382,18 @@ export default function Checkout(props) {
   const [isempty, setIsEmpty] = useState(false);
 
   const handleNext = (event) => {
-    if (activeStep == 0) {
-      alert("welcome");
-      event.preventDefault();
-
-      // const data = new FormData(event.target);
-      // const name = data.get("name");
-      // // const lastName= data.get('lastName')
-      // // console.log(lastName)
-      // const email = data.get("email");
-      // const phone = data.get("phone");
-      // const password = data.get("password");
-      // setActiveStep(activeStep + 1);
-    }
+    // if (activeStep == 0) {
+    //   alert("welcome");
+    //   event.preventDefault();
+    // const data = new FormData(event.target);
+    // const name = data.get("name");
+    // // const lastName= data.get('lastName')
+    // // console.log(lastName)
+    // const email = data.get("email");
+    // const phone = data.get("phone");
+    // const password = data.get("password");
+    // setActiveStep(activeStep + 1);
+    // }
   };
   const handleBack = () => {
     setActiveStep(activeStep - 1);
@@ -281,6 +488,18 @@ export default function Checkout(props) {
                     flexGrow: 1,
                   }}
                 >
+                  {message && (
+                    <p
+                      style={{
+                        backgroundColor: "red",
+                        position: "relative",
+                        textAlign: "center",
+                        alignSelf: "center",
+                      }}
+                    >
+                      {message}
+                    </p>
+                  )}
                   <Stepper
                     id="desktop-stepper"
                     activeStep={activeStep}
@@ -433,11 +652,19 @@ export default function Checkout(props) {
                           Previous
                         </Button>
                       )}
+
                       <Button
-                        variant="contained"
+                        disabled={loading}
+                        variant="outlined"
+                        // variant="contained"
                         endIcon={<ChevronRightRoundedIcon />}
+                        loading={loading}
+                        loadingPosition="center"
                         onClick={subm}
-                        sx={{ width: { xs: "100%", sm: "fit-content" } }}
+                        sx={{
+                          width: { xs: "100%", sm: "fit-content" },
+                          display: `${dispnex}`,
+                        }}
                         type="submit"
                         // form={`form-step${activeStep}`}
                       >

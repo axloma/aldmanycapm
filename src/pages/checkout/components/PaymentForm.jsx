@@ -17,6 +17,19 @@ import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded
 import CreditCardRoundedIcon from "@mui/icons-material/CreditCardRounded";
 import SimCardRoundedIcon from "@mui/icons-material/SimCardRounded";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
+import SaveIcon from "@mui/icons-material/Save";
+import SendIcon from "@mui/icons-material/Send";
+
+import Button from "@mui/material/Button";
+
+import axios from "axios";
+import { useState } from "react";
+import {
+  PaymentElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { Record2Fill } from "react-bootstrap-icons";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   border: "1px solid",
@@ -82,12 +95,23 @@ const FormGrid = styled("div")(() => ({
   flexDirection: "column",
 }));
 
-export default function PaymentForm() {
+export default function PaymentForm({
+  ref,
+  setPaymentstatuse,
+  setpaymentinfo,
+  bookedroom,
+  userid,
+  seconfId,
+  useremail,
+}) {
   const [paymentType, setPaymentType] = React.useState("creditCard");
   const [cardNumber, setCardNumber] = React.useState("");
   const [cvv, setCvv] = React.useState("");
   const [expirationDate, setExpirationDate] = React.useState("");
-
+  const [loading, setLoading] = React.useState(false);
+  const stripe = useStripe();
+  const elements = useElements();
+  const [message, setMessage] = useState(null);
   const handlePaymentTypeChange = (event) => {
     setPaymentType(event.target.value);
   };
@@ -102,7 +126,7 @@ export default function PaymentForm() {
 
   const handleCvvChange = (event) => {
     const value = event.target.value.replace(/\D/g, "");
-    if (value.length <= 3) {
+    if (value.length <= 4) {
       setCvv(value);
     }
   };
@@ -114,214 +138,303 @@ export default function PaymentForm() {
       setExpirationDate(formattedValue);
     }
   };
+  const sub = async (e) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/mybooking`,
+      },
+      redirect: "if_required",
+    });
+    // .then(() => {
+    //   console.log(PaymentElement);
+    //   setLoading(false);
+    // });
+
+    if (error) {
+      console.log(error);
+      setLoading(false);
+      if (error.type === "card_error" || error.type === "validation_error") {
+        console.log(error.message, "EROR IN STRIPE CONFIRMATION");
+        setMessage(error.message);
+      } else {
+        console.log("unaccepected error ");
+        setMessage("An unexpected error occurred.");
+      }
+    }
+    if (paymentIntent?.status === "succeeded") {
+      setLoading(true);
+
+      console.log("SUCCESSEC");
+      setpaymentinfo(paymentIntent);
+      const confirmation = await axios
+        .post("http://127.0.0.1:3500/register/booking", {
+          user: userid,
+          cusE: useremail,
+          room: bookedroom,
+          payment: paymentIntent,
+        })
+        .then((res) => {
+          console.log(res.data.confid);
+          setLoading(false);
+          seconfId(res.data.confid);
+          setPaymentstatuse(true);
+          // e.target.display = "none";
+
+          ref.current.style.display = "none";
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+        });
+    }
+    setLoading(false);
+  };
 
   return (
-    <Stack spacing={{ xs: 3, sm: 6 }} useFlexGap>
-      <FormControl component="fieldset" fullWidth>
-        <RadioGroup
-          aria-label="Payment options"
-          name="paymentType"
-          value={paymentType}
-          onChange={handlePaymentTypeChange}
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            gap: 2,
-          }}
-        >
-          <Card selected={paymentType === "creditCard"}>
-            <CardActionArea
-              onClick={() => setPaymentType("creditCard")}
-              sx={{
-                ".MuiCardActionArea-focusHighlight": {
-                  backgroundColor: "transparent",
-                },
-                "&:focus-visible": {
-                  backgroundColor: "action.hover",
-                },
-              }}
-            >
-              <CardContent
-                sx={{ display: "flex", alignItems: "center", gap: 1 }}
-              >
-                <CreditCardRoundedIcon
-                  fontSize="small"
-                  sx={[
-                    (theme) => ({
-                      color: "grey.400",
-                      ...theme.applyStyles("dark", {
-                        color: "grey.600",
-                      }),
-                    }),
-                    paymentType === "creditCard" && {
-                      color: "primary.main",
-                    },
-                  ]}
-                />
-                <Typography sx={{ fontWeight: "medium" }}>Card</Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-          <Card selected={paymentType === "bankTransfer"}>
-            <CardActionArea
-              onClick={() => setPaymentType("bankTransfer")}
-              sx={{
-                ".MuiCardActionArea-focusHighlight": {
-                  backgroundColor: "transparent",
-                },
-                "&:focus-visible": {
-                  backgroundColor: "action.hover",
-                },
-              }}
-            >
-              <CardContent
-                sx={{ display: "flex", alignItems: "center", gap: 1 }}
-              >
-                <AccountBalanceRoundedIcon
-                  fontSize="small"
-                  sx={[
-                    (theme) => ({
-                      color: "grey.400",
-                      ...theme.applyStyles("dark", {
-                        color: "grey.600",
-                      }),
-                    }),
-                    paymentType === "bankTransfer" && {
-                      color: "primary.main",
-                    },
-                  ]}
-                />
-                <Typography sx={{ fontWeight: "medium" }}>
-                  Bank account
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </RadioGroup>
-      </FormControl>
-      {paymentType === "creditCard" && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <PaymentContainer>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="subtitle2">Credit card</Typography>
-              <CreditCardRoundedIcon sx={{ color: "text.secondary" }} />
-            </Box>
-            <SimCardRoundedIcon
-              sx={{
-                fontSize: { xs: 48, sm: 56 },
-                transform: "rotate(90deg)",
-                color: "text.secondary",
-              }}
-            />
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-                gap: 2,
-              }}
-            >
-              <FormGrid sx={{ flexGrow: 1 }}>
-                <FormLabel htmlFor="card-number" required>
-                  Card number
-                </FormLabel>
-                <OutlinedInput
-                  id="card-number"
-                  autoComplete="card-number"
-                  placeholder="0000 0000 0000 0000"
-                  required
-                  size="small"
-                  value={cardNumber}
-                  onChange={handleCardNumberChange}
-                />
-              </FormGrid>
-              <FormGrid sx={{ maxWidth: "20%" }}>
-                <FormLabel htmlFor="cvv" required>
-                  CVV
-                </FormLabel>
-                <OutlinedInput
-                  id="cvv"
-                  autoComplete="CVV"
-                  placeholder="123"
-                  required
-                  size="small"
-                  value={cvv}
-                  onChange={handleCvvChange}
-                />
-              </FormGrid>
-            </Box>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <FormGrid sx={{ flexGrow: 1 }}>
-                <FormLabel htmlFor="card-name" required>
-                  Name
-                </FormLabel>
-                <OutlinedInput
-                  id="card-name"
-                  autoComplete="card-name"
-                  placeholder="John Smith"
-                  required
-                  size="small"
-                />
-              </FormGrid>
-              <FormGrid sx={{ flexGrow: 1 }}>
-                <FormLabel htmlFor="card-expiration" required>
-                  Expiration date
-                </FormLabel>
-                <OutlinedInput
-                  id="card-expiration"
-                  autoComplete="card-expiration"
-                  placeholder="MM/YY"
-                  required
-                  size="small"
-                  value={expirationDate}
-                  onChange={handleExpirationDateChange}
-                />
-              </FormGrid>
-            </Box>
-          </PaymentContainer>
-          <FormControlLabel
-            control={<Checkbox name="saveCard" />}
-            label="Remember credit card details for next time"
-          />
-        </Box>
-      )}
-      {paymentType === "bankTransfer" && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <Alert severity="warning" icon={<WarningRoundedIcon />}>
-            Your order will be processed once we receive the funds.
-          </Alert>
-          <Typography variant="subtitle1" sx={{ fontWeight: "medium" }}>
-            Bank account
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Please transfer the payment to the bank account details shown below.
-          </Typography>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Typography variant="body1" sx={{ color: "text.secondary" }}>
-              Bank:
-            </Typography>
-            <Typography variant="body1" sx={{ fontWeight: "medium" }}>
-              Mastercredit
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Typography variant="body1" sx={{ color: "text.secondary" }}>
-              Account number:
-            </Typography>
-            <Typography variant="body1" sx={{ fontWeight: "medium" }}>
-              123456789
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Typography variant="body1" sx={{ color: "text.secondary" }}>
-              Routing number:
-            </Typography>
-            <Typography variant="body1" sx={{ fontWeight: "medium" }}>
-              987654321
-            </Typography>
-          </Box>
-        </Box>
-      )}
-    </Stack>
+    // <form id="form-step2" onSubmit={sub}>
+
+    <form id="form-step1" ref={ref} width="100%" height="100vh">
+      <PaymentElement />
+
+      {/* <button type="submit" onClick={sub} name="SUB">
+          {" "}
+          submit
+        </button> */}
+      <Button
+        disabled={loading || !stripe || !elements}
+        fullWidth
+        // variant="contained"
+        loading={loading}
+        loadingPosition="center"
+        startIcon={<SendIcon />}
+        variant="outlined"
+        onClick={sub}
+        // sx={{ width: { xs: "100%", sm: "fit-content" } }}
+        // type="submit"
+        // form={`form-step${activeStep}`}
+      >
+        SUBMIT
+        {/* {activeStep === steps.length - 1 ? "Place order" : "Next"} */}
+      </Button>
+      {message && <div id="payment-message">{message}</div>}
+    </form>
+
+    // {/* </form> */}
+
+    // <Stack spacing={{ xs: 3, sm: 6 }} useFlexGap>
+    //   <FormControl component="fieldset" fullWidth>
+    //     <RadioGroup
+    //       aria-label="Payment options"
+    //       name="paymentType"
+    //       value={paymentType}
+    //       onChange={handlePaymentTypeChange}
+    //       sx={{
+    //         display: "flex",
+    //         flexDirection: { xs: "column", sm: "row" },
+    //         gap: 2,
+    //       }}
+    //     >
+    //       <Card selected={paymentType === "creditCard"}>
+    //         <CardActionArea
+    //           onClick={() => setPaymentType("creditCard")}
+    //           sx={{
+    //             ".MuiCardActionArea-focusHighlight": {
+    //               backgroundColor: "transparent",
+    //             },
+    //             "&:focus-visible": {
+    //               backgroundColor: "action.hover",
+    //             },
+    //           }}
+    //         >
+    //           <CardContent
+    //             sx={{ display: "flex", alignItems: "center", gap: 1 }}
+    //           >
+    //             <CreditCardRoundedIcon
+    //               fontSize="small"
+    //               sx={[
+    //                 (theme) => ({
+    //                   color: "grey.400",
+    //                   ...theme.applyStyles("dark", {
+    //                     color: "grey.600",
+    //                   }),
+    //                 }),
+    //                 paymentType === "creditCard" && {
+    //                   color: "primary.main",
+    //                 },
+    //               ]}
+    //             />
+    //             <Typography sx={{ fontWeight: "medium" }}>Card</Typography>
+    //           </CardContent>
+    //         </CardActionArea>
+    //       </Card>
+    //       <Card selected={paymentType === "bankTransfer"}>
+    //         <CardActionArea
+    //           onClick={() => setPaymentType("bankTransfer")}
+    //           sx={{
+    //             ".MuiCardActionArea-focusHighlight": {
+    //               backgroundColor: "transparent",
+    //             },
+    //             "&:focus-visible": {
+    //               backgroundColor: "action.hover",
+    //             },
+    //           }}
+    //         >
+    //           <CardContent
+    //             sx={{ display: "flex", alignItems: "center", gap: 1 }}
+    //           >
+    //             <AccountBalanceRoundedIcon
+    //               fontSize="small"
+    //               sx={[
+    //                 (theme) => ({
+    //                   color: "grey.400",
+    //                   ...theme.applyStyles("dark", {
+    //                     color: "grey.600",
+    //                   }),
+    //                 }),
+    //                 paymentType === "bankTransfer" && {
+    //                   color: "primary.main",
+    //                 },
+    //               ]}
+    //             />
+    //             <Typography sx={{ fontWeight: "medium" }}>
+    //               Bank account
+    //             </Typography>
+    //           </CardContent>
+    //         </CardActionArea>
+    //       </Card>
+    //     </RadioGroup>
+    //   </FormControl>
+    //   {paymentType === "creditCard" && (
+    //     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+    //       <PaymentContainer>
+    //         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+    //           <Typography variant="subtitle2">Credit card</Typography>
+    //           <CreditCardRoundedIcon sx={{ color: "text.secondary" }} />
+    //         </Box>
+    //         <SimCardRoundedIcon
+    //           sx={{
+    //             fontSize: { xs: 48, sm: 56 },
+    //             transform: "rotate(90deg)",
+    //             color: "text.secondary",
+    //           }}
+    //         />
+    //         <Box
+    //           sx={{
+    //             display: "flex",
+    //             justifyContent: "space-between",
+    //             width: "100%",
+    //             gap: 2,
+    //           }}
+    //         >
+    //           <FormGrid sx={{ flexGrow: 1 }}>
+    //             <FormLabel htmlFor="card-number" required>
+    //               Card number
+    //             </FormLabel>
+    //             <OutlinedInput
+    //               id="card-number"
+    //               name="card-number"
+    //               autoComplete="card-number"
+    //               placeholder="0000 0000 0000 0000"
+    //               required
+    //               size="small"
+    //               value={cardNumber}
+    //               onChange={handleCardNumberChange}
+    //             />
+    //           </FormGrid>
+    //           <FormGrid sx={{ maxWidth: "20%" }}>
+    //             <FormLabel htmlFor="cvv" required>
+    //               CVV
+    //             </FormLabel>
+    //             <OutlinedInput
+    //               id="cvv"
+    //               name="cvv"
+    //               autoComplete="CVV"
+    //               placeholder="123"
+    //               required
+    //               size="small"
+    //               value={cvv}
+    //               onChange={handleCvvChange}
+    //             />
+    //           </FormGrid>
+    //         </Box>
+    //         <Box sx={{ display: "flex", gap: 2 }}>
+    //           <FormGrid sx={{ flexGrow: 1 }}>
+    //             <FormLabel htmlFor="card-name" required>
+    //               Name
+    //             </FormLabel>
+    //             <OutlinedInput
+    //               id="card-name"
+    //               name="card-name"
+    //               autoComplete="card-name"
+    //               placeholder="John Smith"
+    //               required
+    //               size="small"
+    //             />
+    //           </FormGrid>
+    //           <FormGrid sx={{ flexGrow: 1 }}>
+    //             <FormLabel htmlFor="card-expiration" required>
+    //               Expiration date
+    //             </FormLabel>
+    //             <OutlinedInput
+    //               id="card-expiration"
+    //               name="card-expiration"
+    //               autoComplete="card-expiration"
+    //               placeholder="MM/YY"
+    //               required
+    //               size="small"
+    //               value={expirationDate}
+    //               onChange={handleExpirationDateChange}
+    //             />
+    //           </FormGrid>
+    //         </Box>
+    //       </PaymentContainer>
+    //       <FormControlLabel
+    //         control={<Checkbox name="saveCard" />}
+    //         label="Remember credit card details for next time"
+    //       />
+    //     </Box>
+    //   )}
+    //   {paymentType === "bankTransfer" && (
+    //     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+    //       <Alert severity="warning" icon={<WarningRoundedIcon />}>
+    //         Your order will be processed once we receive the funds.
+    //       </Alert>
+    //       <Typography variant="subtitle1" sx={{ fontWeight: "medium" }}>
+    //         Bank account
+    //       </Typography>
+    //       <Typography variant="body1" gutterBottom>
+    //         Please transfer the payment to the bank account details shown below.
+    //       </Typography>
+    //       <Box sx={{ display: "flex", gap: 1 }}>
+    //         <Typography variant="body1" sx={{ color: "text.secondary" }}>
+    //           Bank:
+    //         </Typography>
+    //         <Typography variant="body1" sx={{ fontWeight: "medium" }}>
+    //           Mastercredit
+    //         </Typography>
+    //       </Box>
+    //       <Box sx={{ display: "flex", gap: 1 }}>
+    //         <Typography variant="body1" sx={{ color: "text.secondary" }}>
+    //           Account number:
+    //         </Typography>
+    //         <Typography variant="body1" sx={{ fontWeight: "medium" }}>
+    //           123456789
+    //         </Typography>
+    //       </Box>
+    //       <Box sx={{ display: "flex", gap: 1 }}>
+    //         <Typography variant="body1" sx={{ color: "text.secondary" }}>
+    //           Routing number:
+    //         </Typography>
+    //         <Typography variant="body1" sx={{ fontWeight: "medium" }}>
+    //           987654321
+    //         </Typography>
+    //       </Box>
+    //     </Box>
+    //   )}
+    // </Stack>
   );
 }
