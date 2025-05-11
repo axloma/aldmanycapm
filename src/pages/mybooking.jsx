@@ -39,7 +39,6 @@ export default function BasicTable() {
   const [booking, SetBooking] = useState();
   const [bookedinfo, SetBookedinfo] = useState();
 
-  console.log(user, "FROM MYBOOKING");
   useEffect(() => {
     const getbooking = async () => {
       const token = localStorage.getItem("token");

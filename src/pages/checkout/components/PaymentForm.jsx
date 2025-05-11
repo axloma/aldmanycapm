@@ -171,7 +171,7 @@ export default function PaymentForm({
       console.log("SUCCESSEC");
       setpaymentinfo(paymentIntent);
       const confirmation = await axios
-        .post("http://127.0.0.1:3500/register/booking", {
+        .post(`${process.env.REACT_APP_Backend_URL}/register/booking`, {
           user: userid,
           cusE: useremail,
           room: bookedroom,

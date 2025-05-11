@@ -354,3 +354,6 @@ export default function SingleRoom() {
                         handleNext,
                       })}
                     </Typography> */}
+
+////////mybooking
+  console.log(user, "FROM MYBOOKING");
