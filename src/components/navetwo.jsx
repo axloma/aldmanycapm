@@ -46,7 +46,6 @@ const settingsauth = {
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  // console.log(userlogedin)
   const { userlogedin, handleuserChange, apilogout, Admin } =
     useContext(RoomContext);
   console.log(typeof handleuserChange);
@@ -58,27 +57,22 @@ function ResponsiveAppBar() {
   const location = useLocation();
 
   // const dispatch = useDispatch();
-  console.log(user);
   useEffect(() => {
     // const token = user?.token;
-    // console.log("hi");
+
     // SetThisUserLoged(JSON.parse(localStorage.getItem("userProfile")));
-    console.log(thisUserLoged);
     SetUser(JSON.parse(localStorage.getItem("userProfile")));
 
-    // console.log(user[0].picture, "pic");
     // SetThisUserLoged(handleuserChange);
   }, [location]);
 
-  console.log(user, "NVT");
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-    // console.log(handleuserChange(), "HANDLER");
     SetThisUserLoged(handleuserChange());
-    SetThisUserLoged(user);
+    // SetThisUserLoged(user);
   };
 
   const handleCloseNavMenu = () => {
@@ -110,7 +104,6 @@ function ResponsiveAppBar() {
   };
   function logout() {
     if (user?.verified_email) {
-      console.log(user, "LOGOUT");
       googleLogout();
       localStorage.removeItem("userProfile");
       localStorage.removeItem("token");

@@ -48,7 +48,7 @@ export default function BasicTable() {
     const token = localStorage.getItem("token");
     setLoading(true);
     const cus = await axios
-      .delete(`http://127.0.0.1:3500/booking/${id}`, {
+      .delete(`${process.env.REACT_APP_Backend_URL}/booking/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

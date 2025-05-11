@@ -22,7 +22,6 @@ const booking = ({ room }) => {
     from: refrom?.current?.value,
     to: dto || reto?.current?.value,
   });
-  console.log(dtfrom, "ELVALUE");
   useEffect(() => {
     test();
   }, []);
@@ -39,8 +38,6 @@ const booking = ({ room }) => {
 
   const [openDate, setOpenDate] = useState(false);
   const { addToCart, removeFromCart, bookitem } = useContext(RoomContext);
-  console.log(typeof addToCart);
-  console.log(bookitem);
 
   function handleOp(name, oper) {
     setOptions((prev) => ({
@@ -56,20 +53,9 @@ const booking = ({ room }) => {
       from: refrom.current.value,
       to: reto?.current?.value,
     }));
-    console.log(options);
   }
   function setitem() {
-    // Cookies.set("room", `${room.name}`, { expires: 7 });
-    // const value = Cookies.get("room");
-    // setOptions((prev) => ({
-    //   ...prev,
-    //   from: refrom.current.value,
-    //   to: reto?.current?.value,
-    // }));
-    console.log(options);
     addToCart(String(room.id), options);
-    console.log(refrom.current.value, "VALUE");
-    console.log(bookitem, "BOOKED");
     setBooked((prev) => !prev);
   }
   function cancel() {
@@ -215,10 +201,6 @@ const booking = ({ room }) => {
                   {!booked ? (
                     <>
                       {" "}
-                      {/* <button
-                        className="book_now_btn button_hover"
-                        onClick={test}
-                      ></button> */}
                       <Link
                         onClick={() => setitem()}
                         to="/checkout"

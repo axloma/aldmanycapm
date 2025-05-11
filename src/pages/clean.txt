@@ -1,0 +1,207 @@
+/////booking.jsx
+  // Cookies.set("room", `${room.name}`, { expires: 7 });
+    // const value = Cookies.get("room");
+    // setOptions((prev) => ({
+    //   ...prev,
+    //   from: refrom.current.value,
+    //   to: reto?.current?.value,
+    // }));
+    console.log(options);
+
+      console.log(refrom.current.value, "VALUE");
+    console.log(bookitem, "BOOKED");
+       {/* <button
+                        className="book_now_btn button_hover"
+                        onClick={test}
+                      ></button> */}
+
+//accomedations
+  const [rooms, setRooms] = useState([
+    { name: "Double Deluxe Room", price: 250, imgsrc: "image/room1.jpg" },
+    { name: "Single Deluxe Room", price: 200, imgsrc: "image/room2.jpg" },
+    {
+      name: "honey moon sweet",
+      price: 750,
+      imgsrc: "image/room3.jpg",
+      slug: "slug",
+    },
+    { name: "echonomey double", price: 250, imgsrc: "image/room4.jpg" },
+  ]);
+
+
+///context
+ console.log(response.items, "FROM GETDATA");
+      console.log(response2.items, "FROM GETDATA");
+            // console.log(contact,"FORMATED")
+ // console.log("ITEM",itemId)
+        // console.log(this.bookitem)
+
+             // console.log(this.bookitem)
+        // console.log(typeof(this.bookitem))
+
+                console.log(userProfile);
+        console.log(this.user.Admin, "FROM THS USER");
+      console.log(this.user, "USER CONTEXT");
+          console.log(this.user, "FROM CONTEXT");
+            console.log(res.data, "USER");
+                    console.log(this.user);
+        console.log(this.userlogedin);
+
+                // console.log(this.user);
+        // console.log(this.userlogedin);
+
+          componentDidMount() {
+    this.getData();
+    // let rooms = this.formatData(items);
+    // let featuredRooms = rooms.filter(room => room.featured === true);
+    // //
+    // let maxPrice = Math.max(...rooms.map(item => item.price));
+    // let maxSize = Math.max(...rooms.map(item => item.size));
+    // let bookitem = {}
+
+    // const getDefaultCart = ()=>{
+    //   let cart ={}
+    //   // let cart = rooms.map(room=> carti.id =room.id)
+    //     for (let i = 0;i < rooms.length  ;i++ ){
+    //       cart[rooms[i].id]=0
+
+    //     }
+    //     return cart;
+    // }
+    // this.bookitem = getDefaultCart();
+
+    // this.additem = (itemId,number)=>{
+    //   // console.log("ITEM",itemId)
+    //   // console.log(this.bookitem)
+    //   this.bookitem[itemId] =number;
+    //   // console.log(this.bookitem)
+    //   // console.log(typeof(this.bookitem))
+    // }
+
+    // this.removeitem = (itemId,number)=>{
+    //   this.bookitem[itemId]=0;
+    // }
+
+    // this.setState({
+    //   rooms,
+    //   featuredRooms,
+    //   sortedRooms: rooms,
+    //   loading: false,
+    //   bookitem:this.bookitem,
+    //   addToCart:this.additem,
+    //   removeFromCart:this.removeitem,
+    //   price: maxPrice,
+    //   maxPrice,
+    //   maxSize
+    // });
+  }
+
+        // console.log(contact,"FROM FORMAT")
+    console.log(name, value);
+
+
+//////app.jsx
+// import { Helmet } from 'react-helmet';
+// import Nave from "./components/nave";
+// import Login from './pages/Login';
+// import Reg from './pages/Register';
+// import FG from './pages/ForgotPassword';
+
+// import SignUp from './pages/signup';
+import { BookContextprovider } from "./context/bookcontext";
+// import Dashboard from "./dashboard/dashboard";
+// import { useContext } from 'react';
+// import { RoomProvider } from './context';
+// import Blog from "./pages/blog";
+// import Singleblog from "./pages/singleblog";
+  console.log(Admin, "ADMIn");
+        {/* <Route exact path="/admindash" element={<AdminDash />} /> */}
+        {/* <Route exact path="/dashboard" element={<Dashboard />} /> */}
+        {/* <Route exact path="/test" element={<BookContextprovider />} /> */}
+        {/* <Route exact path="/blog" element={<Blog />} /> */}
+        {/* <Route exact path="/singleBlog" element={<Singleblog />} /> */}
+        {/* 
+        <Route exact path="/login" element={<SignUp />} />*/}
+                {/* <Home /> */}
+        {/* </Route>  */}
+      {/* </RoomProvicer> */}
+      {/* <Nave/> */}
+      {/* <RoomProvicer> */}
+      {/* <BrowserRouter> */}
+      {/* </BrowserRouter> */}
+  // const value = useContext(RoomProvider)
+  // console.log(value)
+  console.log(userProfile);
+  console.log(isAdmin);
+
+//////////navetow
+  // console.log(userlogedin)
+  console.log(user);
+    // console.log(user[0].picture, "pic");
+    // console.log(handleuserChange(), "HANDLER");
+      console.log(user, "LOGOUT");
+    // console.log("hi");
+    console.log(thisUserLoged);
+  console.log(user, "NVT");
+
+/////////////room container 
+// import React from "react";
+// import { RoomConsumer } from "../context";
+// import Loading from "./Loading";
+// import RoomsFilter from "./RoomsFilter";
+// import RoomsList from "./RoomsList";
+// export default function RoomContainer() {
+//   return (
+//     <RoomConsumer>
+//       {value => {
+//         const { loading, setRoom, sortedRooms,rooms } = value;
+//         if (loading) {
+//           return <Loading />;
+//         }
+//         return (
+//           <>
+//             <RoomsFilter rooms={rooms} />
+//             <RoomsList rooms={sortedRooms} setRoom={setRoom} />
+//           </>
+//         );
+//       }}
+//     </RoomConsumer>
+//   );
+// }
+
+///////////booking
+  console.log(dtfrom, "ELVALUE");
+  console.log(typeof addToCart);
+  console.log(bookitem);
+    console.log(options);
+    console.log(this.props.childern, "CHILDERN FROM citnext");
+
+////////////////single room
+
+export default function SingleRoom() {
+  // constructor(props) {
+  //   super(props);
+  //   console.log(this.props);
+  //   console.log(this.params)
+  //   this.state = {
+  //     // slug: slug,
+  //     defaultBcg: defaultBcg
+  //   };
+  // }
+  const context = useContext(RoomContext);
+
+  // componentDidMount() {
+  //   console.log(this.props);
+  // }
+
+   // customPaging: function(i) {
+    //   return (
+    //     <a className="xm">
+    //       <img src={`${defaultImages[i ]} `} />
+    //     </a>
+    //   );
+    // },
+
+    // import Hero from "../components/Hero";
+// import Banner from "../components/Banner";
+// import { baseUrl } from "..../config";

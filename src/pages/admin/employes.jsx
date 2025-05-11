@@ -103,7 +103,7 @@ const employes = (props) => {
     console.log(payload);
     try {
       const user = await axios.post(
-        "http://127.0.0.1:3500/register/admin",
+        `${process.env.REACT_APP_Backend_URL}/register/admin`,
         payload
       );
       console.log(user, "USER");

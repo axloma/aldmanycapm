@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useContext } from "react";
 import { RoomContext } from "../context/context";
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ import POST from "../api/email/apiemail";
 import emailjs from "@emailjs/browser";
 const contact = () => {
   const { contact } = useContext(RoomContext);
+  const [success, SetSuccess] = useState(false);
   const form = useRef();
   console.log(contact == "");
   // console.log(contact)
@@ -47,7 +48,7 @@ const contact = () => {
       )
       .then(
         () => {
-          console.log("SUCCESS!");
+          SetSuccess((prev) => !prev);
         },
         (error) => {
           console.log("FAILED...", error.text);
@@ -56,7 +57,9 @@ const contact = () => {
 
     // await fetch("/api/email", { method: "POST" });
   };
-
+  const close = () => {
+    SetSuccess((prev) => !prev);
+  };
   return (
     <>
       <section className="breadcrumb_area">
@@ -82,6 +85,7 @@ const contact = () => {
       </section>
       {/* <!--================Breadcrumb Area =================-->
         <!--================Contact Area =================--> */}
+
       <section className="contact_area section_gap">
         <div className="container">
           {/* <div id="mapBox"  className="mapBox" 
@@ -134,93 +138,98 @@ const contact = () => {
             </div>
             <div className="col-md-9">
               {/* email form/////////////////////////////////////////////////////  */}
-              <form
-                className="row contact_form"
-                // action="contact_process.php"
-                // action={email}
-                id="contactForm"
-                ref={form}
-                onSubmit={email}
-                noValidate="novalidate"
-              >
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="name"
-                      name="user_name"
-                      placeholder="Enter your name"
-                    />
+              {!success && (
+                <form
+                  className="row contact_form"
+                  // action="contact_process.php"
+                  // action={email}
+                  id="contactForm"
+                  ref={form}
+                  onSubmit={email}
+                  noValidate="novalidate"
+                >
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        name="user_name"
+                        placeholder="Enter your name"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        name="user_email"
+                        placeholder="Enter email address"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="subject"
+                        name="subject"
+                        placeholder="Enter Subject"
+                      />
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="email"
-                      name="user_email"
-                      placeholder="Enter email address"
-                    />
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <textarea
+                        className="form-control"
+                        name="message"
+                        id="message"
+                        rows="1"
+                        placeholder="Enter Message"
+                      ></textarea>
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="subject"
-                      name="subject"
-                      placeholder="Enter Subject"
-                    />
+                  <div className="col-md-12 text-right">
+                    <button
+                      type="submit"
+                      value="submit"
+                      className="btn theme_btn button_hover"
+                    >
+                      Send Message
+                    </button>
                   </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <textarea
-                      className="form-control"
-                      name="message"
-                      id="message"
-                      rows="1"
-                      placeholder="Enter Message"
-                    ></textarea>
-                  </div>
-                </div>
-                <div className="col-md-12 text-right">
-                  <button
-                    type="submit"
-                    value="submit"
-                    className="btn theme_btn button_hover"
-                  >
-                    Send Message
-                  </button>
-                </div>
-              </form>
+                </form>
+              )}
             </div>
           </div>
         </div>
       </section>
+
       {/* <!--================Contact Area =================-->
         
        
        
        <!--================Contact Success and Error message Area =================--> */}
-      <div id="success" className="modal modal-message fade" role="dialog">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <i className="fa fa-close"></i>
-              </button>
-              <h2>Thank you</h2>
-              <p>Your message is successfully sent...</p>
+      {success && (
+        <div id="success" className=" " role="dialog">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                  onClick={close}
+                >
+                  <i className="fa fa-close"></i>
+                </button>
+                <h2 style={{ backgroundColor: "green" }}>Thank you</h2>
+                <p>Your message is successfully sent...</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
+      )}
       {/* <!-- Modals error --> */}
 
       <div id="error" className="modal modal-message fade" role="dialog">

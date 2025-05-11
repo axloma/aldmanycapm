@@ -27,7 +27,7 @@ export default function BasicTable() {
   useEffect(() => {
     async function getusers() {
       await axios
-        .get("http://127.0.0.1:3500/users", {
+        .get(`${process.env.REACT_APP_Backend_URL}/users`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,

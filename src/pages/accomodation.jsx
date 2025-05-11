@@ -7,18 +7,6 @@ import RoomsContainer from "../components/RoomsContainer";
 import { Link } from "react-router-dom";
 // import Cookies from 'js-cookie';
 const accomodation = () => {
-  const [rooms, setRooms] = useState([
-    { name: "Double Deluxe Room", price: 250, imgsrc: "image/room1.jpg" },
-    { name: "Single Deluxe Room", price: 200, imgsrc: "image/room2.jpg" },
-    {
-      name: "honey moon sweet",
-      price: 750,
-      imgsrc: "image/room3.jpg",
-      slug: "slug",
-    },
-    { name: "echonomey double", price: 250, imgsrc: "image/room4.jpg" },
-  ]);
-
   return (
     <>
       {/* <!--================Breadcrumb Area =================--> */}

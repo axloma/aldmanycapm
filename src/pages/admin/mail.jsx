@@ -30,7 +30,7 @@ const mail = () => {
 
     const status = await axios
       .post(
-        "http://127.0.0.1:3500/mail",
+        `${process.env.REACT_APP_Backend_URL}/mail`,
         {
           email,
           from,

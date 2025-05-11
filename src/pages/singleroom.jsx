@@ -1,34 +1,17 @@
 import React, { Component, useState } from "react";
 import defaultBcg from "../images/room-1.jpeg";
-// import Hero from "../components/Hero";
-// import Banner from "../components/Banner";
 import { Link } from "react-router-dom";
 import { RoomContext } from "../context/context";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import StyledHero from "../components/StyledHero";
 import Booking from "../components/booking";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Cursor } from "react-bootstrap-icons";
-// import { baseUrl } from "..../config";
 
 export default function SingleRoom() {
-  // constructor(props) {
-  //   super(props);
-  //   console.log(this.props);
-  //   console.log(this.params)
-  //   this.state = {
-  //     // slug: slug,
-  //     defaultBcg: defaultBcg
-  //   };
-  // }
   const context = useContext(RoomContext);
-
-  // componentDidMount() {
-  //   console.log(this.props);
-  // }
 
   let { slug } = useParams();
   slug = slug.replaceAll("-", " ");
@@ -85,7 +68,7 @@ export default function SingleRoom() {
     Cursor: "pointer",
   };
   const [defaultimg, setDefaultImg] = useState(
-    `https:` + images[0] || this.state.defaultBcg
+    `https:` + images[0] || defaultBcg
   );
 
   const setimg = (img) => {
@@ -94,11 +77,9 @@ export default function SingleRoom() {
   return (
     <>
       <StyledHero img={defaultimg}>
-        {/* <Banner title={`${name} room`}> */}
         <Link to="/accomodation" className="btn-primary">
           back to rooms
         </Link>
-        {/* </Banner> */}
       </StyledHero>
       <section className="single-room ">
         <div className="single-room-images ">

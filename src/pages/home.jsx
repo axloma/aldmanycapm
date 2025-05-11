@@ -10,21 +10,22 @@ import Posts from "../components/posts";
 import Comments from "../components/comment";
 import Room from "../components/Room";
 import RoomsList from "../components/RoomsList";
+import RoomsContainer from "../components/RoomsContainer";
 
 // import Nave from '../components/nave';
 // import Rooms from "../rooms";
 const home = () => {
-  const [rooms, setRooms] = useState([
-    {
-      name: "Double Deluxe Room",
-      price: 250,
-      images: "./image/room1.jpg",
-      slug: "name",
-    },
-    { name: "Single Deluxe Room", price: 200, images: "image/room2.jpg" },
-    { name: "honey moon sweet", price: 750, images: "image/room3.jpg" },
-    { name: "echonomey double", price: 250, images: "image/room4.jpg" },
-  ]);
+  // const [rooms, setRooms] = useState([
+  //   {
+  //     name: "Double Deluxe Room",
+  //     price: 250,
+  //     images: "./image/room1.jpg",
+  //     slug: "name",
+  //   },
+  //   { name: "Single Deluxe Room", price: 200, images: "image/room2.jpg" },
+  //   { name: "honey moon sweet", price: 750, images: "image/room3.jpg" },
+  //   { name: "echonomey double", price: 250, images: "image/room4.jpg" },
+  // ]);
 
   return (
     <>
@@ -63,13 +64,14 @@ const home = () => {
       <section className="accomodation_area section_gap">
         <div className="container">
           <div className="section_title text-center">
-            <h2 className="title_color">{"titlex"}</h2>
+            <h2 className="title_color">{"ALL ROOMS "}</h2>
             {/* <p>{props.desc}</p> */}
           </div>
           <div className="row accomodation_two">
-            {rooms.map((room, index) => (
+            {/* {rooms.map((room, index) => (
               <Room key={index} room={room} />
-            ))}
+            ))} */}
+            <RoomsContainer />
           </div>
         </div>
       </section>

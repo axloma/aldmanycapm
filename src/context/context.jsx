@@ -41,10 +41,8 @@ export default class RoomProvider extends Component {
         content_type: "contact",
       });
       let rooms = this.formatData(response.items);
-      console.log(response.items, "FROM GETDATA");
-      console.log(response2.items, "FROM GETDATA");
+
       let contact = this.formatDatac(response2.items);
-      // console.log(contact,"FORMATED")
       let featuredRooms = rooms.filter((room) => room.featured === true);
       //
       let maxPrice = Math.max(...rooms.map((item) => item.price));
@@ -62,11 +60,7 @@ export default class RoomProvider extends Component {
       this.bookitem = getDefaultCart();
 
       this.additem = (itemId, number) => {
-        // console.log("ITEM",itemId)
-        // console.log(this.bookitem)
         this.bookitem[itemId] = number;
-        // console.log(this.bookitem)
-        // console.log(typeof(this.bookitem))
       };
 
       this.removeitem = (itemId, number) => {
@@ -76,7 +70,6 @@ export default class RoomProvider extends Component {
       //user authentication
       const cuser = () => {
         let userProfile = localStorage.getItem("userProfile");
-        console.log(userProfile);
         if (userProfile) {
           this.userlogedin = true;
           return JSON.parse(userProfile);
@@ -88,24 +81,25 @@ export default class RoomProvider extends Component {
 
       if (this.user?.Admin) {
         this.Admin = true;
-        console.log(this.user.Admin, "FROM THS USER");
       }
-      console.log(this.user, "USER CONTEXT");
 
       this.loginApiCall = async (payload) => {
-        const res = await axios.post("http://127.0.0.1:3500/auth", payload, {
-          withCredentials: true,
-        });
+        const res = await axios.post(
+          `${process.env.REACT_APP_Backend_URL}/auth`,
+          payload,
+          {
+            withCredentials: true,
+          }
+        );
         // .then(alert("welcome"));
 
         const apiResponse = await axios
-          .get("http://127.0.0.1:3500/refresh", {
+          .get(`${process.env.REACT_APP_Backend_URL}/refresh`, {
             withCredentials: true,
           })
           .then((res) => {
             this.user = res.data.user;
-            console.log(this.user, "FROM CONTEXT");
-            console.log(res.data, "USER");
+
             this.userlogedin = true;
             localStorage.setItem("userProfile", JSON.stringify(res.data.user));
             localStorage.setItem("token", res.data.accessToken);
@@ -114,19 +108,15 @@ export default class RoomProvider extends Component {
         return this.userlogedin;
       };
       this.logoutApiCall = async () => {
-        console.log(this.user);
-        console.log(this.userlogedin);
-        await axios.get("http://127.0.0.1:3500/logout", {
-          withCredentials: true,
-        });
         localStorage.removeItem("userProfile");
         localStorage.removeItem("token");
         // localStorage.clear();
         this.user = null;
         this.userlogedin = false;
         this.Admin = false;
-        // console.log(this.user);
-        // console.log(this.userlogedin);
+        await axios.get(`${process.env.REACT_APP_Backend_URL}/logout`, {
+          withCredentials: true,
+        });
       };
       this.handleuser = () => {
         // userlogedin = this.userlogedin;
@@ -164,48 +154,6 @@ export default class RoomProvider extends Component {
 
   componentDidMount() {
     this.getData();
-    // let rooms = this.formatData(items);
-    // let featuredRooms = rooms.filter(room => room.featured === true);
-    // //
-    // let maxPrice = Math.max(...rooms.map(item => item.price));
-    // let maxSize = Math.max(...rooms.map(item => item.size));
-    // let bookitem = {}
-
-    // const getDefaultCart = ()=>{
-    //   let cart ={}
-    //   // let cart = rooms.map(room=> carti.id =room.id)
-    //     for (let i = 0;i < rooms.length  ;i++ ){
-    //       cart[rooms[i].id]=0
-
-    //     }
-    //     return cart;
-    // }
-    // this.bookitem = getDefaultCart();
-
-    // this.additem = (itemId,number)=>{
-    //   // console.log("ITEM",itemId)
-    //   // console.log(this.bookitem)
-    //   this.bookitem[itemId] =number;
-    //   // console.log(this.bookitem)
-    //   // console.log(typeof(this.bookitem))
-    // }
-
-    // this.removeitem = (itemId,number)=>{
-    //   this.bookitem[itemId]=0;
-    // }
-
-    // this.setState({
-    //   rooms,
-    //   featuredRooms,
-    //   sortedRooms: rooms,
-    //   loading: false,
-    //   bookitem:this.bookitem,
-    //   addToCart:this.additem,
-    //   removeFromCart:this.removeitem,
-    //   price: maxPrice,
-    //   maxPrice,
-    //   maxSize
-    // });
   }
 
   formatData(items) {
@@ -222,7 +170,6 @@ export default class RoomProvider extends Component {
     let tempItems = items.map((item) => {
       let id = item.sys.id;
       let contact = { ...item.fields, id };
-      // console.log(contact,"FROM FORMAT")
       return contact;
     });
     return tempItems;
@@ -236,7 +183,6 @@ export default class RoomProvider extends Component {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    console.log(name, value);
 
     this.setState(
       {
@@ -279,7 +225,6 @@ export default class RoomProvider extends Component {
     this.setState({
       sortedRooms: tempRooms,
     });
-    console.log(this.props.childern, "CHILDERN FROM citnext");
   };
 
   render() {

@@ -157,7 +157,10 @@ export default function SignUp(props) {
     };
     console.log(payload);
     try {
-      const user = await axios.post("http://127.0.0.1:3500/register", payload);
+      const user = await axios.post(
+        `${process.env.REACT_APP_Backend_URL}/register`,
+        payload
+      );
       console.log(user, "USER");
       alert("WELCOME ");
       if (user.status === 201) {
