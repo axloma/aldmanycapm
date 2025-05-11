@@ -103,6 +103,9 @@ export default class RoomProvider extends Component {
             this.userlogedin = true;
             localStorage.setItem("userProfile", JSON.stringify(res.data.user));
             localStorage.setItem("token", res.data.accessToken);
+          })
+          .catch((err) => {
+            console.log(err);
           });
 
         return this.userlogedin;
