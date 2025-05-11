@@ -30,6 +30,8 @@
 
 
 ///context
+import items from "../data";
+
  console.log(response.items, "FROM GETDATA");
       console.log(response2.items, "FROM GETDATA");
             // console.log(contact,"FORMATED")
