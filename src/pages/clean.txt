@@ -205,3 +205,152 @@ export default function SingleRoom() {
     // import Hero from "../components/Hero";
 // import Banner from "../components/Banner";
 // import { baseUrl } from "..../config";
+
+///////////////checkout
+ if (activeStep == 1) {
+      // const booking = new FormData(document.getElementById("form-step2"));
+      // console.log(ref, "ref");
+      // ref.current.click();
+      // console.log(booking.get("SUB"));
+      // booking = useController({
+      //   control,
+      //   name: "number",
+      //   rules: {
+      //     required: "Can't be blank",
+      //     minLength: {
+      //       value: 19,
+      //       message: "Incomplete card number",
+      //     },
+      //     pattern: {
+      //       value: /^(?=.*\d)[\d ]+$/,
+      //       message: "Wrong format, numbers only",
+      //     },
+      //   },
+      // });
+      // const cardname = booking.get("card-name");
+      // const cardnumber = booking.get("card-number");
+      // const cvv = booking.get("cvv");
+      // let cardexp = booking.get("card-expiration");
+      // console.log(cardname, cardnumber, cardexp, cvv);
+      // let isValid = true;
+      // if (!cardname || !cardnumber || !cvv || !cardexp) {
+      //   isValid = false;
+      //   alert("allfield must");
+      //   return;
+      // }
+      // let isValidCard = validator.isCreditCard(cardnumber);
+      // if (!cardnumber || !isValidCard) {
+      //   setCardNumberError(true);
+      //   alert("cardNumberError");
+      //   isValid = false;
+      //   return;
+      // } else {
+      //   setCardNumberError(false);
+      //   isValid = true;
+      // }
+      // bookingpayload = {
+      //   cardname: cardname,
+      //   cardnumber: cardnumber,
+      //   cvv: cvv,
+      //   cardexp: cardexp,
+      // };
+      // console.log(bookingpayload);
+      // if (isValid) {
+      //   const confirmation = await axios
+      //     .post("http://127.0.0.1:3500/register/booking", {
+      //       user: userId,
+      //       room: room,
+      //       payment: room,
+      //     })
+      //     .then((res) => {
+      //       console.log(res.data.confid);
+      //       setActiveStep(activeStep + 1);
+      //     });
+      // }
+      // ref.current.click();
+      // if (paymentstatus) {
+      // }
+      setDisplayNext("none");
+
+      setActiveStep(activeStep + 1);
+    }
+  };
+
+
+    console.log(payload);
+      // let clientSecrete;
+      console.log(price, "priceis");
+
+            // const password = "defaultaldamanypassword";
+  // const { apilogin, userlogedin, handleuserChange } = useContext(RoomContext);
+  // const [userloged, setUserLoged] = useState(null);
+    // const stripe = useStripe();
+  // const elements = useElements();
+    // const [dispnex, setDisplayNext] = useState("");
+ console.log(user);
+      // if (!user) {
+      //   throw new Error(user, "failed to complete ");
+      // }
+      // console.log(user);
+          // console.log(e.response.data.message);
+
+          // userId = res.data.id;
+          // userpayload = payload;
+
+           // useEffect(() => {
+  //   if (paymentstatus) {
+  //     console.log(paymentstatus, "CHECKOUT");
+  //     const add = async () => {
+  //       const confirmation = await axios
+  //         .post("http://127.0.0.1:3500/register/booking", {
+  //           user: userId,
+  //           room: room,
+  //           payment: paymentinfo,
+  //         })
+  //         .then((res) => {
+  //           console.log(res.data.confid);
+  //           setActiveStep(activeStep + 1);
+  //         });
+  //       console.log(paymentinfo);
+  //       console.log(confirmation);
+  //       bookingpayload = confirmation;
+  //       return confirmation;
+  //     };
+  //   }
+  // }, [paymentstatus]);
+
+
+  const handleNext = (event) => {
+    // if (activeStep == 0) {
+    //   alert("welcome");
+    //   event.preventDefault();
+    // const data = new FormData(event.target);
+    // const name = data.get("name");
+    // // const lastName= data.get('lastName')
+    // // console.log(lastName)
+    // const email = data.get("email");
+    // const phone = data.get("phone");
+    // const password = data.get("password");
+    // setActiveStep(activeStep + 1);
+    // }
+  };
+     // if (activeStep == 0) {
+    //   alert("welcome");
+    //   event.preventDefault();
+    // const data = new FormData(event.target);
+    // const name = data.get("name");
+    // // const lastName= data.get('lastName')
+    // // console.log(lastName)
+    // const email = data.get("email");
+    // const phone = data.get("phone");
+    // const password = data.get("password");
+    // setActiveStep(activeStep + 1);
+    // }
+        {/* // pass handleNext to getStepContent here */}
+                    {/* <Typography>
+                      {getStepContent(activeStep, {
+                        // checkoutForm,
+                        // handleChange,
+                        handleNext,
+                      })}
+                    </Typography> */}

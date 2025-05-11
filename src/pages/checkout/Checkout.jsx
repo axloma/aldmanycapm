@@ -143,11 +143,9 @@ export default function Checkout(props) {
   const [expError, setexpError] = useState(false);
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = useState(null);
-  // const [dispnex, setDisplayNext] = useState("");
   const { addToCart, removeFromCart, bookitem, rooms } =
     useContext(RoomContext);
-  // const stripe = useStripe();
-  // const elements = useElements();
+
   [paymentstatus, setPaymentstatuse] = useState(false);
   [paymentinfo, setpaymentinfo] = useState([]);
   let price = 0;
@@ -159,9 +157,6 @@ export default function Checkout(props) {
       return price;
     }
   });
-
-  // const { apilogin, userlogedin, handleuserChange } = useContext(RoomContext);
-  // const [userloged, setUserLoged] = useState(null);
 
   const room = rooms.map((room) => {
     if (bookitem[room.id] != 0) {
@@ -237,7 +232,6 @@ export default function Checkout(props) {
       const l = data.get("last-name");
       const email = data.get("email");
       const phone = data.get("phone");
-      // const password = "defaultaldamanypassword";
       const username = `${f} ${l}`;
 
       const payload = {
@@ -246,20 +240,21 @@ export default function Checkout(props) {
         phone: phone,
         amount: Number(price),
       };
-      console.log(payload);
-      // let clientSecrete;
-      console.log(price, "priceis");
+
       setLoading(true);
       const user = await axios
-        .post("http://127.0.0.1:3500/register/customer", payload, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .post(
+          `${process.env.REACT_APP_Backend_URL}/register/customer`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((res) => {
           setLoading(false);
           console.log(res.data.id, "from payload");
-          // userId = res.data.id;
           setUserId(res.data.id);
           userid = res.data.id;
           clientSecrete = res.data.clientSecret;
@@ -267,83 +262,14 @@ export default function Checkout(props) {
           setMessage(null);
           setActiveStep(activeStep + 1);
           useremail = email;
-          // userpayload = payload;
         })
         .catch((e) => {
           setLoading(false);
           setMessage(e.response.data.message);
           window.scrollTo(0, 0);
-          // console.log(e.response.data.message);
         });
-      console.log(user);
-      // if (!user) {
-      //   throw new Error(user, "failed to complete ");
-      // }
-      // console.log(user);
     }
     if (activeStep == 1) {
-      // const booking = new FormData(document.getElementById("form-step2"));
-      // console.log(ref, "ref");
-      // ref.current.click();
-      // console.log(booking.get("SUB"));
-      // booking = useController({
-      //   control,
-      //   name: "number",
-      //   rules: {
-      //     required: "Can't be blank",
-      //     minLength: {
-      //       value: 19,
-      //       message: "Incomplete card number",
-      //     },
-      //     pattern: {
-      //       value: /^(?=.*\d)[\d ]+$/,
-      //       message: "Wrong format, numbers only",
-      //     },
-      //   },
-      // });
-      // const cardname = booking.get("card-name");
-      // const cardnumber = booking.get("card-number");
-      // const cvv = booking.get("cvv");
-      // let cardexp = booking.get("card-expiration");
-      // console.log(cardname, cardnumber, cardexp, cvv);
-      // let isValid = true;
-      // if (!cardname || !cardnumber || !cvv || !cardexp) {
-      //   isValid = false;
-      //   alert("allfield must");
-      //   return;
-      // }
-      // let isValidCard = validator.isCreditCard(cardnumber);
-      // if (!cardnumber || !isValidCard) {
-      //   setCardNumberError(true);
-      //   alert("cardNumberError");
-      //   isValid = false;
-      //   return;
-      // } else {
-      //   setCardNumberError(false);
-      //   isValid = true;
-      // }
-      // bookingpayload = {
-      //   cardname: cardname,
-      //   cardnumber: cardnumber,
-      //   cvv: cvv,
-      //   cardexp: cardexp,
-      // };
-      // console.log(bookingpayload);
-      // if (isValid) {
-      //   const confirmation = await axios
-      //     .post("http://127.0.0.1:3500/register/booking", {
-      //       user: userId,
-      //       room: room,
-      //       payment: room,
-      //     })
-      //     .then((res) => {
-      //       console.log(res.data.confid);
-      //       setActiveStep(activeStep + 1);
-      //     });
-      // }
-      // ref.current.click();
-      // if (paymentstatus) {
-      // }
       setDisplayNext("none");
 
       setActiveStep(activeStep + 1);
@@ -354,47 +280,13 @@ export default function Checkout(props) {
       setActiveStep(activeStep + 1);
     }
   }, [paymentstatus]);
-  // useEffect(() => {
-  //   if (paymentstatus) {
-  //     console.log(paymentstatus, "CHECKOUT");
-  //     const add = async () => {
-  //       const confirmation = await axios
-  //         .post("http://127.0.0.1:3500/register/booking", {
-  //           user: userId,
-  //           room: room,
-  //           payment: paymentinfo,
-  //         })
-  //         .then((res) => {
-  //           console.log(res.data.confid);
-  //           setActiveStep(activeStep + 1);
-  //         });
-  //       console.log(paymentinfo);
-  //       console.log(confirmation);
-  //       bookingpayload = confirmation;
-  //       return confirmation;
-  //     };
-  //   }
-  // }, [paymentstatus]);
 
   const [activeStep, setActiveStep] = React.useState(0);
 
   const [ismodified, setIsmodified] = useState(false);
   const [isempty, setIsEmpty] = useState(false);
 
-  const handleNext = (event) => {
-    // if (activeStep == 0) {
-    //   alert("welcome");
-    //   event.preventDefault();
-    // const data = new FormData(event.target);
-    // const name = data.get("name");
-    // // const lastName= data.get('lastName')
-    // // console.log(lastName)
-    // const email = data.get("email");
-    // const phone = data.get("phone");
-    // const password = data.get("password");
-    // setActiveStep(activeStep + 1);
-    // }
-  };
+  const handleNext = (event) => {};
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
@@ -606,14 +498,7 @@ export default function Checkout(props) {
                 ) : (
                   <React.Fragment>
                     {getStepContent(activeStep)}
-                    {/* // pass handleNext to getStepContent here */}
-                    {/* <Typography>
-                      {getStepContent(activeStep, {
-                        // checkoutForm,
-                        // handleChange,
-                        handleNext,
-                      })}
-                    </Typography> */}
+
                     <Box
                       sx={[
                         {
