@@ -49,7 +49,7 @@ const services = () => {
         ></div>
         <div className="container">
           <div className="section_title text-center">
-            <h2 className="title_w">Royal Facilities</h2>
+            <h2 className="title_w">ALDAMANYCAMP Facilities</h2>
             <p>Who are in extremely love with eco friendly system.</p>
           </div>
 
