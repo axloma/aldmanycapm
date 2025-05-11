@@ -10,7 +10,7 @@ jwtInterceptor.interceptors.response.use(
   async (error) => {
     if (error?.response?.status === 401 || 403) {
       await axios
-        .get("http://127.0.0.1:3500/refresh", {
+        .get(`${process.env.REACT_APP_Backend_URL}/refresh`, {
           withCredentials: true,
         })
         .catch((refresherror) => {

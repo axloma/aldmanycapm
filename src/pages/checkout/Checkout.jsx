@@ -99,7 +99,7 @@ function getStepContent(step) {
       const automail = async () => {
         const result = await axios
           .post(
-            "http://127.0.0.1:3500/automail",
+            `${process.env.REACT_APP_Backend_URL}/automail`,
             {
               useremail,
               subj,

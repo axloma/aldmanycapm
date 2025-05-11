@@ -31,7 +31,7 @@ export default function BasicTable() {
 
   async function getAllbooking() {
     await axios
-      .get("http://127.0.0.1:3500/booking", {
+      .get(`${process.env.REACT_APP_Backend_URL}/booking`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,

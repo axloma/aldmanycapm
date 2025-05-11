@@ -30,7 +30,7 @@ export default function BasicTable() {
   const [loading, setLoading] = React.useState(false);
   async function getusers() {
     jwtInterceptor
-      .get("http://127.0.0.1:3500/customers", {
+      .get(`${process.env.REACT_APP_Backend_URL}/customers`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
