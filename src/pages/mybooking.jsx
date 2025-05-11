@@ -45,7 +45,7 @@ export default function BasicTable() {
       const token = localStorage.getItem("token");
 
       const cus = await jwtInterceptor
-        .get(`${process.env.REACT_APP_Backend_URL}/${user?.email}`, {
+        .get(`${process.env.REACT_APP_Backend_URL}/booking/${user?.email}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

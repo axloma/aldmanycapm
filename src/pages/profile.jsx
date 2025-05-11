@@ -56,9 +56,9 @@ const profile = () => {
         data-background=""
       ></div>
       <div className="container">
-        <button onClick={user}>profile</button>
+        {/* <button onClick={user}>profile</button>
         <button onClick={logout}>logout</button>
-        <button onClick={info}>info</button>
+        <button onClick={info}>info</button> */}
         <Link to="/dashboard">grid</Link>
       </div>
     </section>
