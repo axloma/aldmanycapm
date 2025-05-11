@@ -278,7 +278,7 @@ function ResponsiveAppBar() {
                     <MenuItem onClick={handleCloseUserMenu}>
                       <Typography sx={{ textAlign: "center" }}>
                         {" "}
-                        Profile{" "}
+                        mybooking{" "}
                       </Typography>
                     </MenuItem>
                   </Link>
