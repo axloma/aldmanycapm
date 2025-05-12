@@ -15,6 +15,7 @@ export default class RoomProvider extends Component {
     loading: true,
     contact: [],
     gallery: [],
+    service: [],
     user: null,
     Admin: false,
     userlogedin: false,
@@ -44,12 +45,15 @@ export default class RoomProvider extends Component {
       let response3 = await Client.getEntries({
         content_type: "gallery",
       });
+      let response4 = await Client.getEntries({
+        content_type: "services",
+      });
 
       let rooms = this.formatData(response.items);
 
       let contact = this.formatDatac(response2.items);
       let gallery = this.formatDataG(response3.items);
-
+      let service = this.formatDatac(response4.items);
       let featuredRooms = rooms.filter((room) => room.featured === true);
       //
       let maxPrice = Math.max(...rooms.map((item) => item.price));
@@ -147,6 +151,7 @@ export default class RoomProvider extends Component {
         //contact
         contact: contact,
         gallery: gallery,
+        service: service,
         //user
         user: this.user,
         apilogin: this.loginApiCall,

@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import { nanoid } from "nanoid";
 import defaultImg from "../images/defaultBcg.jpeg";
 import {
   FaBeer,
@@ -8,34 +7,33 @@ import {
   FaSwimmer,
   FaShuttleVan,
   FaWifi,
+  FaCar,
+  FaShoppingCart,
+  FaBasketballBall,
+  FaCat,
 } from "react-icons/fa";
+
+import { useContext } from "react";
+import { nanoid } from "nanoid";
+import { RoomContext } from "../context/context";
+const items = {
+  FaBeer: FaBeer,
+  FaHiking: FaHiking,
+  FaSwimmer: FaSwimmer,
+  FaShuttleVan: FaShuttleVan,
+  FaWifi: FaWifi,
+  FaCar: FaCar,
+  FaShoppingCart: FaShoppingCart,
+  FaBasketballBall: FaBasketballBall,
+  FaCat: FaCat,
+};
+
 const services = () => {
-  const [facilities, setFacilities] = useState([
-    {
-      name: "WIFI",
-      desc: "Usage of the Internet is becoming more ",
-      iClass: FaWifi,
-      img: "./image/blog/blog-1.jpg",
-    },
-    {
-      name: "shuttleVan",
-      desc: "Usage of the Internet is becoming more ",
-      iClass: FaShuttleVan,
-      img: "./image/blog/blog-1.jpg",
-    },
-    {
-      name: "Hiking",
-      desc: "Usage of the Internet is becoming more ",
-      iClass: FaHiking,
-      img: "./image/blog/blog-1.jpg",
-    },
-    {
-      name: "swimming",
-      desc: "Usage of the Internet is becoming more ",
-      iClass: FaSwimmer,
-      img: "./image/blog/blog-1.jpg",
-    },
-  ]);
+  let { service } = useContext(RoomContext);
+
+  service = service.map((el) =>
+    el.icon ? { ...el, icon: String(el.icon[0].replace(/^"(.*)"$/, "$1")) } : el
+  );
 
   return (
     <>
@@ -49,28 +47,26 @@ const services = () => {
         ></div>
         <div className="container">
           <div className="section_title text-center">
-            <h2 className="title_w">ALDAMANYCAMP Facilities</h2>
+            <h2 className="title_w">ALDAMANY CAMP Facilities</h2>
             <p>Who are in extremely love with eco friendly system.</p>
           </div>
 
           <div className="row mb_30">
             {/* TODO: autogenerate facility  */}
-            {facilities.map((fac, index) => (
+
+            {service.map(({ name, img, desc, icon }) => (
               <div className="col-lg-4 col-md-6" key={nanoid()}>
                 <div className="facilities_item">
                   {/* <h4 className="sec_h4"><i className={fac.iClass}></i>{fac.name}</h4> */}
                   <h4 className="sec_h4">
-                    <span className="icons">
-                      <fac.iClass />
-                    </span>{" "}
-                    {fac.name}
+                    <span className="icons">{items[icon]()}</span> {name}
                   </h4>
                   <img
-                    src={fac.img || defaultImg}
+                    src={`https:${img.fields.file.url}` || defaultImg}
                     alt=""
                     className="img-fluid"
                   />
-                  <p>{fac.desc}.</p>
+                  <p>{desc}.</p>
                 </div>
               </div>
             ))}
