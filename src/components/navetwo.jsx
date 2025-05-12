@@ -23,6 +23,8 @@ import { useEffect } from "react";
 import logo from "../assets/logo.jpeg";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import { Translate } from "react-bootstrap-icons";
+import { ToastContainer, toast } from "react-toastify";
+
 const pages = {
   HOME: "/",
   "about us": "/about",
@@ -122,6 +124,19 @@ function ResponsiveAppBar() {
       style={{ backgroundColor: "#070707ba", minHeight: "5vh" }}
     >
       <Container maxWidth="xl">
+        <ToastContainer
+          position="bottom-center"
+          autoClose={5000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick={true}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          // transition={Bounce}
+        />
         <Toolbar disableGutters>
           {/* <AdbIcon
             sx={{ display: { xs: "", md: "flex" }, mr: 1, src: `${logo}` }}

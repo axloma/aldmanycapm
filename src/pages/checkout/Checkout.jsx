@@ -27,6 +27,7 @@ import { nanoid } from "nanoid";
 import { format, isFuture, isPast } from "date-fns";
 import axios from "axios";
 import validator from "validator";
+import { toast } from "react-toastify";
 
 import "@stripe/stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -214,14 +215,18 @@ export default function Checkout(props) {
       if (!valid) {
         if (nameError) {
           e.preventDefault();
-          console.log("ERROR");
+          toast.error(`${nameErrorMessage}`);
+          // console.log("ERROR");
           alert(nameErrorMessage);
           return;
         } else if (emailError) {
-          alert(emailErrorMessage);
+          toast.error(`${emailErrorMessage}`);
+          // alert(emailErrorMessage);
           return;
         } else if (phonelError) {
-          alert(phoneErrorMessage);
+          toast.error(`${phoneErrorMessage}`);
+
+          // alert(phoneErrorMessage);
           return;
         }
         return;
@@ -266,6 +271,8 @@ export default function Checkout(props) {
         .catch((e) => {
           setLoading(false);
           setMessage(e.response.data.message);
+          toast.error(`${e.response.data.message}`);
+
           window.scrollTo(0, 0);
         });
     }

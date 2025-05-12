@@ -25,6 +25,8 @@ import { useContext, useState } from "react";
 import { RoomContext } from "../../context/context";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
+
 import axios from "axios";
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -80,8 +82,6 @@ export default function SignUp(props) {
   const { apilogin, userlogedin, handleuserChange } = useContext(RoomContext);
   const [userloged, setUserLoged] = useState(null);
 
-  console.log(userlogedin, "FROM REGISTER");
-
   const navigate = useNavigate();
 
   const validateInputs = (e) => {
@@ -133,7 +133,6 @@ export default function SignUp(props) {
   };
 
   const handleSubmit = async (event) => {
-    console.log(event);
     if (nameError || emailError || passwordError) {
       event.preventDefault();
       return;
@@ -142,7 +141,7 @@ export default function SignUp(props) {
     const data = new FormData(event.currentTarget);
     const name = data.get("name");
     // const lastName= data.get('lastName')
-    // console.log(lastName)
+
     const email = data.get("email");
     const phone = data.get("phone");
     const password = data.get("password");
@@ -155,29 +154,46 @@ export default function SignUp(props) {
       Cpassword,
       phone: phone,
     };
-    console.log(payload);
+
     try {
       const user = await axios.post(
         `${process.env.REACT_APP_Backend_URL}/register`,
         payload
       );
-      console.log(user, "USER");
-      alert("WELCOME ");
+
+      // alert("WELCOME ");
+      toast.success("WELCOME ");
       if (user.status === 201) {
         const log = await apilogin({ user: email, pwd: password });
-        console.log(log);
+
         if (log) {
           navigate("/");
         }
       }
     } catch (e) {
-      console.log(e);
+      // console.log(e);
+      toast.error(e.response.data.message);
+      // toast("Wow so easy!");
+      // toast.error(e.message, {
+      //   position: "bottom-center",
+      //   autoClose: 5000,
+      //   hideProgressBar: true,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "dark",
+      //   // transition: Bounce,
+      // });
 
       if (e.status === 409) {
-        alert("Email already exists ");
+        console.log(e.message);
+        toast.error("Email already exists ");
+        // alert("Email already exists ");
       }
       if (e.status === 400) {
-        alert(e.response.data.message);
+        // toast.error(e.response.data.message);
+        // alert(e.response.data.message);
       }
     }
 
@@ -195,7 +211,7 @@ export default function SignUp(props) {
   useEffect(() => {
     const user = localStorage.getItem("userProfile");
     setUserLoged(user);
-    console.log(user);
+
     if (user) {
       navigate("/profile");
     }
@@ -310,7 +326,7 @@ export default function SignUp(props) {
                         name="passwordC"
                         placeholder="••••••"
                         type="password"
-                        id="password"
+                        id="passwordC"
                         autoComplete="new-password"
                         variant="outlined"
                         error={passwordError}

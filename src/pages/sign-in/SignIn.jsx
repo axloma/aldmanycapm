@@ -20,6 +20,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 // import { InputAdornment } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
+import { toast } from "react-toastify";
 
 import {
   GoogleIcon,
@@ -193,7 +194,9 @@ export default function SignIn(props) {
         })
         .catch((err) => console.log(err));
     },
-    onError: (error) => console.log("Login Failed:", error),
+    onError: (error) => toast.error(`Login Failed:${error}`),
+
+    // console.log("Login Failed:", error),
   });
 
   // log out function to log the user out of google and set the profile array to null
@@ -201,6 +204,14 @@ export default function SignIn(props) {
     googleLogout();
     setProfile(null);
   };
+  useEffect(() => {
+    const user = localStorage.getItem("userProfile");
+    setUserLoged(user);
+
+    if (user) {
+      navigate("/profile");
+    }
+  }, [userloged]);
   return (
     <>
       {!userloged && (

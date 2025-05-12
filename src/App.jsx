@@ -21,6 +21,7 @@ import { usePathname } from "./use-pathname";
 import { useEffect, useContext } from "react";
 import AdminDash from "./pages/admin/dashboard";
 import { RoomContext } from "./context/context";
+import { Protector } from "./pages/protector";
 function useScrollToTop() {
   const pathname = usePathname();
 
@@ -60,7 +61,11 @@ function App() {
         <Route exact path="/checkout" element={<Checkout />} />
         <Route exact path="/reg" element={<SignUp />} />
         <Route exact path="/login" element={<SignIn />} />
-        <Route exact path="/profile" element={<Profile />} />
+        <Route
+          exact
+          path="/profile"
+          element={<Protector Component={<Profile />} />}
+        />
         <Route exact path="/mybooking" element={<Mybooking />} />
         <Route path="*" element={<Error />} />
       </Routes>

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Client from "../contentful";
 import axios from "axios";
 import gallery from "../pages/gallery";
+import { toast } from "react-toastify";
 
 const RoomContext = React.createContext();
 
@@ -95,13 +96,15 @@ export default class RoomProvider extends Component {
       }
 
       this.loginApiCall = async (payload) => {
-        const res = await axios.post(
-          `${process.env.REACT_APP_Backend_URL}/auth`,
-          payload,
-          {
+        const res = await axios
+          .post(`${process.env.REACT_APP_Backend_URL}/auth`, payload, {
             withCredentials: true,
-          }
-        );
+          })
+          .catch((err) =>
+            toast.error(
+              `ERROR  Username or password are not correct ${err.message}`
+            )
+          );
         // .then(alert("welcome"));
 
         const apiResponse = await axios
@@ -116,7 +119,7 @@ export default class RoomProvider extends Component {
             localStorage.setItem("token", res.data.accessToken);
           })
           .catch((err) => {
-            console.log(err);
+            toast.error(`ERROR  SOMETHING WENT WRONG  ${err.message}`);
           });
 
         return this.userlogedin;
