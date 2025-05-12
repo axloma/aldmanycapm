@@ -46,7 +46,7 @@ function App() {
   const userProfile = cuser();
   const isAdmin = userProfile?.Admin;
   return (
-    <>
+    <div>
       {" "}
       {!isAdmin && <Nave />}
       {isAdmin && <AdminDash />}
@@ -65,7 +65,7 @@ function App() {
         <Route path="*" element={<Error />} />
       </Routes>
       {!isAdmin && <Footer />}
-    </>
+    </div>
   );
 }
 

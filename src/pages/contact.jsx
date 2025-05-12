@@ -4,7 +4,6 @@ import { useContext } from "react";
 import { RoomContext } from "../context/context";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
-import POST from "../api/email/apiemail";
 // require("dotenv").config();
 // import { Email } from "./email";
 import emailjs from "@emailjs/browser";
@@ -12,9 +11,7 @@ const contact = () => {
   const { contact } = useContext(RoomContext);
   const [success, SetSuccess] = useState(false);
   const form = useRef();
-  console.log(contact == "");
-  // console.log(contact)
-  // console.log(contact[0].country,"FROM CONTACT")
+
   let country = "";
   let city = "";
   let phone = "";

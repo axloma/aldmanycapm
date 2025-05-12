@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import Client from "./Contentful";
 import Client from "../contentful";
 import axios from "axios";
+import gallery from "../pages/gallery";
 
 const RoomContext = React.createContext();
 
@@ -13,6 +14,7 @@ export default class RoomProvider extends Component {
     bookitem: [],
     loading: true,
     contact: [],
+    gallery: [],
     user: null,
     Admin: false,
     userlogedin: false,
@@ -39,9 +41,15 @@ export default class RoomProvider extends Component {
       let response2 = await Client.getEntries({
         content_type: "contact",
       });
+      let response3 = await Client.getEntries({
+        content_type: "gallery",
+      });
+
       let rooms = this.formatData(response.items);
 
       let contact = this.formatDatac(response2.items);
+      let gallery = this.formatDataG(response3.items);
+
       let featuredRooms = rooms.filter((room) => room.featured === true);
       //
       let maxPrice = Math.max(...rooms.map((item) => item.price));
@@ -138,6 +146,7 @@ export default class RoomProvider extends Component {
         removeFromCart: this.removeitem,
         //contact
         contact: contact,
+        gallery: gallery,
         //user
         user: this.user,
         apilogin: this.loginApiCall,
@@ -175,6 +184,15 @@ export default class RoomProvider extends Component {
       return contact;
     });
     return tempItems;
+  }
+  formatDataG(items) {
+    let tempItems = items.map((item) => {
+      // let id = items.sys.id;
+      let images = item.fields.gallery.map((image) => image.fields.file.url);
+      return images;
+    });
+
+    return tempItems[0];
   }
   getRoom = (slug) => {
     let tempRooms = [...this.state.rooms];

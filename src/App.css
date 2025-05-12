@@ -201,6 +201,10 @@
 
 .footer-area{
   padding: 16px 0px;
+  position: relative;
+  bottom: -1.5rem;
+
+
 }
 
 .slick-slide > div{
