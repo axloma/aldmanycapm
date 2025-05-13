@@ -9,23 +9,21 @@ export default class FeaturedRooms extends Component {
   render() {
     let { loading, featuredRooms: rooms } = this.context;
 
-    rooms = rooms.map(room => {
+    rooms = rooms.map((room) => {
       return <Room key={room.id} room={room} />;
     });
     return (
-
-    <section  className="accomodation_area section_gap">
-      <div  className="container">
-          <div  className="section_title text-center">
-              <h2  className="title_color">{"room.name"}</h2>
-              <p>{"props.desc"}</p>
+      <section className="accomodation_area section_gap">
+        <div className="container">
+          <div className="section_title text-center">
+            <h2 className="title_color">{"ROOMS"}</h2>
+            {/* <p>{"props.desc"}</p> */}
           </div>
-          <div  className="row accomodation_two">    
+          <div className="row accomodation_two">
             {loading ? <Loading /> : rooms}
           </div>
         </div>
-    </section>
-
+      </section>
     );
   }
 }

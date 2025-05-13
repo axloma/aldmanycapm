@@ -121,7 +121,7 @@ function ResponsiveAppBar() {
   return (
     <AppBar
       position="fixed"
-      style={{ backgroundColor: "#070707ba", minHeight: "5vh" }}
+      style={{ backgroundColor: "#070707ba", minHeight: "4vh" }}
     >
       <Container maxWidth="xl">
         <ToastContainer

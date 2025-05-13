@@ -3,6 +3,7 @@ import { Box, Flex } from "@chakra-ui/react";
 
 // Saas UI Imports ;
 import { Persona, Form, FormLayout, Field, SubmitButton } from "@saas-ui/react";
+import { useState } from "react";
 
 // Custom Hooks ;
 import usePasswordMatch from "./pwd";
@@ -20,10 +21,18 @@ export const UserSettings = () => {
     console.log(event);
     // Handle form submission here
   };
+  const [user, SetUser] = useState(
+    JSON.parse(localStorage.getItem("userProfile"))
+  );
+  const widthform = "100%";
   return (
     <>
       <Box padding="8">
-        <Flex alignItems="start" marginBlock="4">
+        <Flex
+          alignItems="center"
+          marginBlock="4"
+          style={{ boxShadow: "5px 10px 8px 10px black" }}
+        >
           <Persona
             name="Velda Kiara"
             secondaryLabel="Pro Plan"
@@ -35,10 +44,22 @@ export const UserSettings = () => {
         <Form
           onSubmit={handleSubmit}
           defaultValues={{
-            firstName: "Velda",
-            lastName: "Kiara",
-            email: "velda@gmail.com",
+            firstName: user?.username,
+            lastName: user?.username.split(" ")[1],
+            email: user?.email || "velda@gmail.com",
           }}
+          style={{
+            color: "gray",
+            fontSize: "1.3rem",
+            fontWeight: "bold",
+            boxShadow: "5px 10px 8px 10px black",
+            // minwidth: "100vw",
+
+            // display: "flex",
+            // alignItems: "center",
+            // justifyContent: "center",
+          }}
+          className="USERSETTING"
         >
           <FormLayout>
             <Field
@@ -46,7 +67,7 @@ export const UserSettings = () => {
               textColor="black"
               name="firstName"
               label="First Name"
-              width="20.5em"
+              width={widthform}
               rules={{ required: true }}
             />
             <Field
@@ -54,7 +75,7 @@ export const UserSettings = () => {
               textColor="black"
               name="lastName"
               label="Last Name"
-              width="20.5em"
+              width={widthform}
               rules={{ required: true }}
             />
             <Field
@@ -64,7 +85,7 @@ export const UserSettings = () => {
               label="Email"
               type="email"
               rules={{ required: true }}
-              width="20.5em"
+              width={widthform}
             />
             <Field
               fontFamily="mono"
@@ -74,7 +95,7 @@ export const UserSettings = () => {
               name="password"
               label=" New Password"
               value={password}
-              width="18em"
+              width={widthform}
               rules={{ required: true }}
               onChange={handlePasswordChange}
             />
@@ -86,7 +107,7 @@ export const UserSettings = () => {
               name="confirmPassword"
               label="Confirm Password"
               value={confirmPassword}
-              width="18em"
+              width={widthform}
               rules={{ required: true }}
               onChange={handleConfirmPasswordChange}
             />

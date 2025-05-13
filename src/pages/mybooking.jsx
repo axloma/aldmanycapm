@@ -9,10 +9,10 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useContext } from "react";
 import { RoomContext } from "../context/context";
-import axios from "axios";
 import { nanoid } from "nanoid";
 import jwtInterceptor from "../components/jwtintercept";
 import Button from "@mui/material/Button";
+import Hero from "../components/hero";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -57,81 +57,81 @@ export default function BasicTable() {
   // console.log(booking, "FROM mBOOKI");
   // console.log(newb, "NEWB");
   return (
-    <section className="breadcrumb_area">
-      <div
-        className="overlay bg-parallax"
-        data-stellar-ratio="0.8"
-        data-stellar-vertical-offset="0"
-        data-background=""
-      ></div>
-      <div className="container">
-        <Button
-          // disabled={loading}
-          variant="outlined"
-          // variant="contained"
-          // endIcon={<ChevronRightRoundedIcon />}
-          // loading={loading}
-          loadingPosition="center"
-          onClick={getb}
-          sx={{
-            width: { xs: "100%", sm: "fit-content" },
-            // display: `${dispnex}`,
-            backgroundColor: "white",
-          }}
-          // type="submit"
-          // form={`form-step${activeStep}`}
-        >
-          show all booking
-        </Button>
+    <>
+      <Hero title={"About Us"} />{" "}
+      {/* <section className="breadcrumb_area">
+        <div
+          className="overlay bg-parallax"
+          data-stellar-ratio="0.8"
+          data-stellar-vertical-offset="0"
+          data-background=""
+        ></div>
+        <div className="container"> */}
+      <Button
+        // disabled={loading}
+        variant="outlined"
+        // variant="contained"
+        // endIcon={<ChevronRightRoundedIcon />}
+        // loading={loading}
+        loadingPosition="center"
+        onClick={getb}
+        sx={{
+          width: { xs: "100%", sm: "fit-content" },
+          // display: `${dispnex}`,
+          backgroundColor: "white",
+        }}
+        // type="submit"
+        // form={`form-step${activeStep}`}
+      >
+        show all booking
+      </Button>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>My Bookings</TableCell>
+              {/* <TableCell align="right">Date & Timings</TableCell> */}
+              <TableCell align="right">CheckIn</TableCell>
+              <TableCell align="right">CheckOut</TableCell>
+              <TableCell align="right">Adult</TableCell>
+              <TableCell align="right">Childern</TableCell>
+              <TableCell align="right">Number of room</TableCell>
 
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>My Bookings</TableCell>
-                {/* <TableCell align="right">Date & Timings</TableCell> */}
-                <TableCell align="right">CheckIn</TableCell>
-                <TableCell align="right">CheckOut</TableCell>
-                <TableCell align="right">Adult</TableCell>
-                <TableCell align="right">Childern</TableCell>
-                <TableCell align="right">Number of room</TableCell>
+              <TableCell align="right">room price</TableCell>
+              <TableCell align="right">img</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {bookedinfo?.map((book) => (
+              <TableRow
+                key={nanoid()}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {book?.room?.name}
+                </TableCell>
+                <TableCell align="right">{book?.bookinfo?.from}</TableCell>
+                <TableCell align="right">{book?.bookinfo?.to}</TableCell>
+                <TableCell align="right">{book?.bookinfo?.adult}</TableCell>
+                <TableCell align="right">{book?.bookinfo?.childern}</TableCell>
+                <TableCell align="right">{book?.bookinfo?.room}</TableCell>
+                <TableCell align="right">{book?.room?.price}</TableCell>
 
-                <TableCell align="right">room price</TableCell>
-                <TableCell align="right">img</TableCell>
+                <TableCell align="right">
+                  {" "}
+                  <img
+                    src={`https://` + book?.room?.images[0]}
+                    height="40vh"
+                    width="40vw"
+                  />{" "}
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {bookedinfo?.map((book) => (
-                <TableRow
-                  key={nanoid()}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {book?.room?.name}
-                  </TableCell>
-                  <TableCell align="right">{book?.bookinfo?.from}</TableCell>
-                  <TableCell align="right">{book?.bookinfo?.to}</TableCell>
-                  <TableCell align="right">{book?.bookinfo?.adult}</TableCell>
-                  <TableCell align="right">
-                    {book?.bookinfo?.childern}
-                  </TableCell>
-                  <TableCell align="right">{book?.bookinfo?.room}</TableCell>
-                  <TableCell align="right">{book?.room?.price}</TableCell>
-
-                  <TableCell align="right">
-                    {" "}
-                    <img
-                      src={`https://` + book?.room?.images[0]}
-                      height="40vh"
-                      width="40vw"
-                    />{" "}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
-    </section>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {/* </div>
+      </section> */}
+    </>
   );
 }

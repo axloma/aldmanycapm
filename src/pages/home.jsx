@@ -61,20 +61,21 @@ const home = () => {
         
         <!--================ Accomodation Area  =================--> */}
       {/* <Room room={rooms} title={"Hotel Accomodation"} /> */}
-      <section className="accomodation_area section_gap">
+      {/* <section className="accomodation_area section_gap">
         <div className="container">
           <div className="section_title text-center">
-            <h2 className="title_color">{"ALL ROOMS "}</h2>
-            {/* <p>{props.desc}</p> */}
-          </div>
-          <div className="row accomodation_two">
-            {/* {rooms.map((room, index) => (
+            <h2 className="title_color">{"ALL ROOMS "}</h2> */}
+      {/* <p>{props.desc}</p> */}
+      {/* </div>
+          <div className="row accomodation_two"> */}
+      {/* {rooms.map((room, index) => (
               <Room key={index} room={room} />
             ))} */}
-            <RoomsContainer />
-          </div>
+      {/* <RoomsContainer /> */}
+      <FeaturedRooms />
+      {/* </div>
         </div>
-      </section>
+      </section> */}
       {/* <RoomsList rooms={rooms} /> */}
       {/* <!--================ Accomodation Area  =================-->
         

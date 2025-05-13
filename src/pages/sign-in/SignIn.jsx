@@ -156,8 +156,8 @@ export default function SignIn(props) {
     console.log(typeof apilogin);
     const log = await apilogin(payload);
 
-    setUserLoged(log);
-    console.log(log, "log");
+    // setUserLoged(log);
+    // console.log(log, "log");
 
     if (log === true) {
       navigate("/");

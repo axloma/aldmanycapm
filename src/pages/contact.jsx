@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import { useContext } from "react";
 import { RoomContext } from "../context/context";
-import { Link } from "react-router-dom";
 import { useRef } from "react";
 // require("dotenv").config();
 // import { Email } from "./email";
 import emailjs from "@emailjs/browser";
+import Hero from "../components/hero";
 const contact = () => {
   const { contact } = useContext(RoomContext);
   const [success, SetSuccess] = useState(false);
@@ -59,27 +59,7 @@ const contact = () => {
   };
   return (
     <>
-      <section className="breadcrumb_area">
-        <div
-          className="overlay bg-parallax"
-          data-stellar-ratio="0.8"
-          data-stellar-vertical-offset="0"
-          data-background=""
-        ></div>
-        <div className="container">
-          <div className="page-cover text-center">
-            <h2 className="page-cover-tittle">Contact Us</h2>
-            <ol className="breadcrumb">
-              {/* <li><a href="index.html">Home</a></li> */}
-              <li className="homebtn">
-                {" "}
-                <Link to="/">Home</Link>
-              </li>
-              <li className="active">Contact Us</li>
-            </ol>
-          </div>
-        </div>
-      </section>
+      <Hero title={"Contact Us"} />
       {/* <!--================Breadcrumb Area =================-->
         <!--================Contact Area =================--> */}
 
@@ -110,7 +90,13 @@ const contact = () => {
           </div>
 
           <div className="row">
-            <div className="col-md-3">
+            <div
+              className="col-md-3"
+              style={{
+                boxShadow: "5px 10px 3px 1px black",
+                fontSize: "1rem",
+              }}
+            >
               <div className="contact_info">
                 <div className="info_item">
                   <i className="lnr lnr-home"></i>
@@ -144,6 +130,10 @@ const contact = () => {
                   ref={form}
                   onSubmit={email}
                   noValidate="novalidate"
+                  style={{
+                    boxShadow: "5px 10px 8px 10px black",
+                    fontSize: "1rem",
+                  }}
                 >
                   <div className="col-md-6">
                     <div className="form-group">

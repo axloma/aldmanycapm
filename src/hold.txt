@@ -1294,3 +1294,96 @@ export default Room;
   //       Setusers(res.data);
   //     });
   // }
+
+
+  /////////contact 
+   <section className="breadcrumb_area">
+        <div
+          className="overlay bg-parallax"
+          data-stellar-ratio="0.8"
+          data-stellar-vertical-offset="0"
+          data-background=""
+        ></div>
+        <div className="container">
+          <div className="page-cover text-center">
+            <h2 className="page-cover-tittle">Contact Us</h2>
+            <ol className="breadcrumb">
+              {/* <li><a href="index.html">Home</a></li> */}
+              <li className="homebtn">
+                {" "}
+                <Link to="/">Home</Link>
+              </li>
+              <li className="active">Contact Us</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+
+////////////gallery
+   <section className="breadcrumb_area">
+        <div
+          className="overlay bg-parallax"
+          data-stellar-ratio="0.8"
+          data-stellar-vertical-offset="0"
+          data-background=""
+        ></div>
+        <div className="container">
+          <div className="page-cover text-center">
+            <h2 className="page-cover-tittle">Gallery</h2>
+            <ol className="breadcrumb">
+              {/* <li><a href="index.html">Home</a></li> */}
+              <li className="homebtn">
+                {" "}
+                <Link to="/">Home</Link>
+              </li>
+              <li className="active">Gallery</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+////////accomedation
+ <section className="breadcrumb_area">
+        <div
+          className="overlay bg-parallax"
+          data-stellar-ratio="0.8"
+          data-stellar-vertical-offset="0"
+          data-background=""
+        ></div>
+        <div className="container">
+          <div className="page-cover text-center">
+            <h2 className="page-cover-tittle">Accomodation</h2>
+            <ol className="breadcrumb">
+              {/* <li><a href="index.html">Home</a></li> */}
+              <li className="homebtn">
+                {" "}
+                <Link to="/">Home</Link>
+              </li>
+              <li className="active">Accomodation</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+///////about us  <section className="breadcrumb_area">
+        <div
+          className="overlay bg-parallax"
+          data-stellar-ratio="0.8"
+          data-stellar-vertical-offset="0"
+          data-background=""
+        ></div>
+        <div className="container">
+          <div className="page-cover text-center">
+            <h2 className="page-cover-tittle">About Us</h2>
+            <ol className="breadcrumb">
+              {/* <li><a href="index.html">Home</a></li> */}
+              <li className="homebtn">
+                {" "}
+                <Link to="/">Home</Link>
+              </li>
+              <li className="active">About</li>
+            </ol>
+          </div>
+        </div>
+      </section>

@@ -140,7 +140,11 @@
   position: relative;
     background-color: #04091e;
     /* display: none; */
-    top: 6rem;
+    top: 6vh;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    
 }
 /* .slick-dots li{
   width:1200px;
@@ -432,6 +436,7 @@
   }
   /* end of globals */
   @media screen and (min-width: 768px) {
+   
     .nav-btn {
       display: none;
     }
@@ -524,6 +529,7 @@
     }
   }
   @media screen and (min-width: 992px) {
+    
     .featured-rooms-center {
       width: 95vw;
       max-width: 1170px;
@@ -692,6 +698,15 @@
       width: 90vw;
     }
   }
+  .USERSETTING{
+    min-width: 60vw;
+    
+  }
+  @media screen and (max-width: 992px) {
+  .USERSETTING{
+    min-width: 80vw;
+  }
+}
   @media screen and (min-width: 992px) {
     .roomslist-center {
       width: 95vw;
