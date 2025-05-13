@@ -146,6 +146,24 @@
     align-self: center;
     
 }
+
+/* .nav-link{
+  display: block;
+  background-color:" #d0d0ea || #030304";
+  margin: .4rem;
+  color:  hsl(0deg 0% 100%);
+  padding: .6rem;
+  font-size: 1.1rem;
+  font-family: monospace;
+  text-align: center;
+  align-items: center;
+  border-radius: 1rem;
+}
+
+.nav-link.active{
+  background: "#efefef";
+  transform: "translateY(-2px)";
+} */
 /* .slick-dots li{
   width:1200px;
   top:30px;
@@ -700,7 +718,7 @@
   }
   .USERSETTING{
     min-width: 60vw;
-    
+
   }
   @media screen and (max-width: 992px) {
   .USERSETTING{

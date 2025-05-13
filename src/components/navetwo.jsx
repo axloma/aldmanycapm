@@ -29,8 +29,8 @@ const pages = {
   HOME: "/",
   "about us": "/about",
   rooms: "/accomodation",
-  Gallery: "Gallery",
-  contact: "contact",
+  Gallery: "/Gallery",
+  contact: "/contact",
 };
 const settings = {
   Profile: "/mybooking",
@@ -89,19 +89,22 @@ function ResponsiveAppBar() {
   }
   const stylebtn = {
     display: "block",
-    my: 2,
+    my: 4,
     backgroundColor: "#d0d0ea" || "#030304",
     margin: ".4rem",
-    color: " hsl(0deg 0% 100%)",
+    // color: " hsl(0deg 0% 100%)",
     padding: ".6rem",
     fontSize: "1.1rem",
-    fontFamily: "monospace",
+    fontFamily: `'Lilita One', 'Coral Pixels' , cursive`,
+    fontOpticalSizing: "auto",
+    fontWeight: "600",
+    fontStyle: "normal",
     textAlign: "center",
     alighnItem: "center",
     borderRadius: "1rem",
-    "&:hover": {
-      background: "#efefef",
-      transform: "translateY(-1px)",
+    "&:hover , &.active": {
+      background: "#473636 ",
+      transform: "translateY(-2px)",
     },
   };
   function logout() {
@@ -241,9 +244,17 @@ function ResponsiveAppBar() {
               // pages.map(([key,value]) => (
 
               Object.keys(pages).map((item, i) => (
-                <Button key={item} onClick={handleCloseNavMenu} sx={stylebtn}>
-                  <Link to={pages[item]}>{item}</Link>
-                </Button>
+                <Link to={pages[item]}>
+                  <Button
+                    key={item}
+                    onClick={handleCloseNavMenu}
+                    sx={stylebtn}
+                    className={`nav-link ${location.pathname === pages[item] ? "active" : ""}`}
+                    // className="nav-link"
+                  >
+                    {item}
+                  </Button>
+                </Link>
               ))
 
               // })
