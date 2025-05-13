@@ -18,22 +18,7 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 export default function BasicTable() {
-  const [rooms, setRooms] = useState([
-    { name: "Double Deluxe Room", price: 250, imgsrc: "./image/room1.jpg" },
-    { name: "Single Deluxe Room", price: 200, imgsrc: "image/room2.jpg" },
-    { name: "honey moon sweet", price: 750, imgsrc: "image/room3.jpg" },
-    { name: "echonomey double", price: 250, imgsrc: "image/room4.jpg" },
-  ]);
-
   const { userlogedin, handleuserChange, user, Admin } =
     useContext(RoomContext);
   const [booking, SetBooking] = useState();
@@ -58,7 +43,7 @@ export default function BasicTable() {
   }, []);
   let newb;
   const getb = () => {
-    newb = booking.map((item, index) => {
+    newb = booking?.map((item, index) => {
       let bookinfo = Object.values(item[0].bookitem);
       bookinfo = bookinfo[0];
       const room = item[0].room;
@@ -69,7 +54,7 @@ export default function BasicTable() {
     });
     SetBookedinfo(newb);
   };
-  console.log(booking, "FROM mBOOKI");
+  // console.log(booking, "FROM mBOOKI");
   // console.log(newb, "NEWB");
   return (
     <section className="breadcrumb_area">

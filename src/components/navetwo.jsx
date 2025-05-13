@@ -50,7 +50,7 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { userlogedin, handleuserChange, apilogout, Admin } =
     useContext(RoomContext);
-  console.log(typeof handleuserChange);
+  // console.log(typeof handleuserChange);
   const [thisUserLoged, SetThisUserLoged] = useState(null);
   const navigate = useNavigate();
   const [user, SetUser] = useState(

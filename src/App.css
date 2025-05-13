@@ -135,6 +135,13 @@
   /* max-width: 39vw; */
   height: 30vh;
 }
+
+.profile{
+  position: relative;
+    background-color: #04091e;
+    /* display: none; */
+    top: 6rem;
+}
 /* .slick-dots li{
   width:1200px;
   top:30px;
@@ -732,6 +739,7 @@
     font-size: 0.8rem;
     margin-left: 0.5rem;
   }
+
   @media screen and (min-width: 776px) {
     .filter-form {
       width: 70vw;

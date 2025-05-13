@@ -7,14 +7,14 @@ import { RoomProvider } from "./context/context";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 createRoot(document.getElementById("root")).render(
-  // <StrictMode>
-  <RoomProvider>
-    <Router>
-      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLECLIENTID}>
-        <App />.
-      </GoogleOAuthProvider>
-      ;
-    </Router>
-  </RoomProvider>
-  // </StrictMode>,
+  <StrictMode>
+    <RoomProvider>
+      <Router>
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLECLIENTID}>
+          <App />
+        </GoogleOAuthProvider>
+        ;
+      </Router>
+    </RoomProvider>
+  </StrictMode>
 );

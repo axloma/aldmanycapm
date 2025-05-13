@@ -14,7 +14,7 @@ import React, { Component } from "react";
 import Checkout from "./pages/checkout/Checkout";
 import SignUp from "./pages/sign-up/SignUp";
 import SignIn from "./pages/sign-in/SignIn";
-import Profile from "./pages/profile";
+import Profile from "./pages/userprofile/profile";
 import { useLocation } from "react-router-dom";
 import Mybooking from "./pages/mybooking";
 import { usePathname } from "./use-pathname";
@@ -22,6 +22,26 @@ import { useEffect, useContext } from "react";
 import AdminDash from "./pages/admin/dashboard";
 import { RoomContext } from "./context/context";
 import { Protector } from "./pages/protector";
+import { extendTheme } from "@chakra-ui/react";
+
+import { SaasProvider, theme as baseTheme } from "@saas-ui/react";
+export const myTheme = extendTheme(
+  {
+    styles: {
+      global: {
+        ".containerx": {
+          height: "$100vh",
+          // top: "3rem",
+        },
+        ".highlight": {
+          color: "red",
+          fontSize: "1.9rem",
+        },
+      },
+    },
+  },
+  baseTheme
+);
 function useScrollToTop() {
   const pathname = usePathname();
 
@@ -61,12 +81,22 @@ function App() {
         <Route exact path="/checkout" element={<Checkout />} />
         <Route exact path="/reg" element={<SignUp />} />
         <Route exact path="/login" element={<SignIn />} />
+
         <Route
           exact
           path="/profile"
-          element={<Protector Component={<Profile />} />}
+          element={
+            <SaasProvider theme={myTheme}>
+              <Protector Component={<Profile />} />{" "}
+            </SaasProvider>
+          }
         />
-        <Route exact path="/mybooking" element={<Mybooking />} />
+
+        <Route
+          exact
+          path="/mybooking"
+          element={<Protector Component={<Mybooking />} />}
+        />
         <Route path="*" element={<Error />} />
       </Routes>
       {!isAdmin && <Footer />}

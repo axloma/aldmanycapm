@@ -22,7 +22,6 @@ export const Protector = ({ Component }) => {
   const navigate = useNavigate();
 
   const token = userData();
-  console.log(token);
 
   useEffect(() => {
     if (!token) {
