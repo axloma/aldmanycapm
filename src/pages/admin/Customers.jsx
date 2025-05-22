@@ -8,82 +8,52 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { nanoid } from "nanoid";
-import axios from "axios";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import jwtInterceptor from "../../components/jwtintercept";
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 export default function BasicTable() {
   const [users, Setusers] = useState([]);
   const [loading, setLoading] = React.useState(false);
-  async function getusers() {
-    jwtInterceptor
-      .get(`${process.env.REACT_APP_Backend_URL}/customers`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res.data);
-        Setusers(res.data);
-      });
-  }
+  const axiosPrivate = useAxiosPrivate();
 
   const delcus = async (id) => {
     console.log(localStorage.getItem("token"));
     const token = localStorage.getItem("token");
     setLoading(true);
-    const cus = await axios
-      .delete(`${process.env.REACT_APP_Backend_URL}/customers/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      })
-      .then(() => {
-        getusers();
-        setLoading(false);
-        // Setusers(
-        //   users.filter((item, i) => {
-        //     item._id !== id;
-        //   })
-        // );
-      });
+    const cus = await axiosPrivate.delete(`/customers/${id}`).then(() => {
+      Setusers(
+        users.filter((user) => {
+          return user._id != id;
+        })
+      );
+      setLoading(false);
+    });
   };
-  // async function getusers() {
-  //   await axios
-  //     .get("http://127.0.0.1:3500/customers", {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //       withCredentials: true,
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       Setusers(res.data);
-  //     });
-  // }
+
   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    async function getusers() {
+      axiosPrivate
+        .get(`/customers`, {
+          signal: controller.signal,
+        })
+        .then((res) => {
+          console.log(res.data);
+          isMounted && Setusers(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
     getusers();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, []);
 
-  //   console.log(allusers);
-  //   console.log(users, "USER2");
   return (
     <section className="breadcrumb_area">
       <div

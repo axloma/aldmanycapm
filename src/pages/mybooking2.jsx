@@ -7,100 +7,89 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useContext } from "react";
-import { RoomContext } from "../context/context";
 import { nanoid } from "nanoid";
-import jwtInterceptor from "../components/jwtintercept";
 import Button from "@mui/material/Button";
 import Hero from "../components/hero";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+// import axios from "../api/axios";
+import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import FormLabel from "@mui/material/FormLabel";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+
 export default function BasicTable() {
-  // const { userlogedin, handleuserChange, user, Admin } =
-  //   useContext(RoomContext);
-  const { auth } = useAuth();
-  const user = auth?.user;
-  console.log(auth, "AUTH", "USER", user);
   const [booking, SetBooking] = useState();
   const [bookedinfo, SetBookedinfo] = useState();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-    const getbooking = async () => {
-      // const token = localStorage.getItem("token");
+  const [confid, SetConfId] = useState();
+  let newb;
 
-      // const cus = await jwtInterceptor
-      //   .get(`${process.env.REACT_APP_Backend_URL}/booking/${user?.email}`, {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //     withCredentials: true,
-      //   })
-
-      const response = await axiosPrivate
-        .get(`/booking/${user}`, {
-          signal: controller.signal,
-        })
+  const getb = async () => {
+    if (confid.trim() != "") {
+      const controller = new AbortController();
+      const response = await axios
+        .get(
+          `${process.env.REACT_APP_Backend_URL}/bookingconf/confid/${confid}`
+        )
         .then((res) => {
           console.log(res, "FROM MYBOOKING");
-          isMounted && SetBooking(res.data);
+          // isMounted && SetBooking(res.data);
+          newb = res?.data?.map((item, index) => {
+            let bookinfo = Object.values(item[0].bookitem);
+            bookinfo = bookinfo[0];
+            const room = item[0].room;
+            const newroom = { bookinfo, room };
+            // console.log(bookedinfo, "BOOKEDINFO");
+            return newroom;
+          });
+          SetBookedinfo(newb);
         })
         .catch((err) => console.log(err));
-    };
-    getbooking();
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, []);
-  let newb;
-  const getb = () => {
-    newb = booking?.map((item, index) => {
-      let bookinfo = Object.values(item[0].bookitem);
-      bookinfo = bookinfo[0];
-      const room = item[0].room;
-      const newroom = { bookinfo, room };
-      // console.log(newroom), "NEWROM";
-      // console.log(bookinfo[0], "IX");
-      return newroom;
-    });
-    SetBookedinfo(newb);
+    } else {
+      console.log(confid);
+    }
   };
-  // console.log(booking, "FROM mBOOKI");
-  // console.log(newb, "NEWB");
+
   return (
     <>
       <Hero title={"About Us"} />{" "}
-      {/* <section className="breadcrumb_area">
-        <div
-          className="overlay bg-parallax"
-          data-stellar-ratio="0.8"
-          data-stellar-vertical-offset="0"
-          data-background=""
-        ></div>
-        <div className="container"> */}
-      <Button
-        // disabled={loading}
-        variant="outlined"
-        // variant="contained"
-        // endIcon={<ChevronRightRoundedIcon />}
-        // loading={loading}
-        loadingPosition="center"
-        onClick={getb}
-        sx={{
-          width: { xs: "100%", sm: "fit-content" },
-          // display: `${dispnex}`,
-          backgroundColor: "white",
-        }}
-        // type="submit"
-        // form={`form-step${activeStep}`}
-      >
-        show all booking
-      </Button>
+      <FormControl style={{ width: "100%" }}>
+        <FormLabel htmlFor="email">CONFIRMATION ID</FormLabel>
+        <TextField
+          id="email"
+          type="email"
+          name="email"
+          placeholder="your CONFIRMATION ID "
+          autoComplete="email"
+          autoFocus
+          required
+          fullWidth
+          variant="outlined"
+          //   value={confid}
+          onChange={(e) => SetConfId(e.target.value)}
+        />
+        <Button
+          // disabled={loading}
+          variant="outlined"
+          // variant="contained"
+          // endIcon={<ChevronRightRoundedIcon />}
+          // loading={loading}
+          loadingPosition="center"
+          onClick={getb}
+          sx={{
+            width: { xs: "100%", sm: "fit-content" },
+            // display: `${dispnex}`,
+            backgroundColor: "white",
+          }}
+          // type="submit"
+          // form={`form-step${activeStep}`}
+        >
+          show booking
+        </Button>
+      </FormControl>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

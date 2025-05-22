@@ -27,17 +27,18 @@ import {
   FacebookIcon,
   SitemarkIcon,
 } from "./components/CustomIcons";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import Cookies from 'js-cookie';
 import { useContext, useState, useEffect } from "react";
 import { RoomContext } from "../../context/context";
-import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import jwtInterceptor from "../../components/jwtintercept";
 import { jwtDecode } from "jwt-decode";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import { useRef } from "react";
+// import AuthContext from "../../context/AuthProvider";
+import useAuth from "../../hooks/useAuth";
 // import { useEffect } from 'react';
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -90,11 +91,16 @@ export default function SignIn(props) {
   const [userloged, setUserLoged] = useState(
     JSON.parse(localStorage.getItem("userProfile"))
   );
+  const [errmsg, setErrMsg] = useState();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [profile, SetProfile] = useState();
-  const { apilogin, userlogedin } = useContext(RoomContext);
+  // const { apilogin, userlogedin, loginApiCall } = useContext(RoomContext);
   const [showPassword, SetShowPassword] = useState(false);
+  const { setAuth } = useAuth();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const [loading, SetLoading] = useState(false);
   const handleShowPassword = () => {
     SetShowPassword((prev) => !prev);
   };
@@ -139,7 +145,62 @@ export default function SignIn(props) {
     top: "-4rem",
     // marginBottom:"3rem"
   };
+  const loginApiCall = async (payload, user, pwd) => {
+    let userlogedin = false;
+    try {
+      SetLoading(true);
+      const res = await axios.post(
+        `${process.env.REACT_APP_Backend_URL}/auth`,
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      const accessToken = res?.data?.accessToken;
+      const roles = res?.data?.roles;
+      setAuth({ user: payload.user, roles, accessToken });
+    } catch (err) {
+      SetLoading(false);
+      if (!err?.response) {
+        toast.error(`"No Server Response" ${err.message}`);
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 400) {
+        toast.error(`"Missing Username or Password" ${err.message}`);
+        setErrMsg("Missing Username or Password");
+      } else if (err.response?.status === 401) {
+        toast.error(
+          `"Unauthorized  Username or Password not correct " ${err.message}`
+        );
+        setErrMsg("Unauthorized  Username or Password not correct");
+      } else {
+        toast.error(`"Login Failed" ${err.message}`);
+        setErrMsg("Login Failed");
+      }
+      // errRef.current.focus();
+    }
+    // toast.error(
+    //   `ERROR  Username or password are not correct ${err.message}`
+    // )
+    // .then(alert("welcome"));
 
+    const apiResponse = await axios
+      .get(`${process.env.REACT_APP_Backend_URL}/refresh`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        // this.user = res.data.user;
+
+        userlogedin = true;
+        localStorage.setItem("userProfile", JSON.stringify(res.data.user));
+        // localStorage.setItem("token", res.data.accessToken);
+      })
+      .catch((err) => {
+        toast.error(`ERROR  SOMETHING WENT WRONG  ${err.message}`);
+      });
+
+    return userlogedin;
+  };
   const handleSubmit = async (event) => {
     if (emailError || passwordError) {
       event.preventDefault();
@@ -149,18 +210,15 @@ export default function SignIn(props) {
 
     const data = new FormData(event.currentTarget);
     // const value = Cookies.get('jwt');
-    // console.log(value)
+
     let email = data.get("email");
     let password = data.get("password");
     let payload = { user: email, pwd: password };
-    console.log(typeof apilogin);
-    const log = await apilogin(payload);
-
+    const log = await loginApiCall(payload);
     // setUserLoged(log);
-    // console.log(log, "log");
-
     if (log === true) {
-      navigate("/");
+      navigate(from, { replace: true });
+      // navigate("/");
     }
   };
 
@@ -180,23 +238,19 @@ export default function SignIn(props) {
           }
         )
         .then((res) => {
-          console.log(res.data);
           let dat = res.data;
           // SetProfile(res.data);
-          // console.log(profile);
           localStorage.setItem("userProfile", JSON.stringify(res.data));
-          localStorage.setItem(
-            "token",
-            JSON.stringify(codeResponse.access_token)
-          );
+          // localStorage.setItem(
+          //   "token",
+          //   JSON.stringify(codeResponse.access_token)
+          // );
 
           navigate("/");
         })
         .catch((err) => console.log(err));
     },
     onError: (error) => toast.error(`Login Failed:${error}`),
-
-    // console.log("Login Failed:", error),
   });
 
   // log out function to log the user out of google and set the profile array to null
@@ -234,7 +288,12 @@ export default function SignIn(props) {
                   sx={{ position: "fixed", top: "5rem", right: "1rem" }}
                 />
                 <Card variant="outlined">
-                  <SitemarkIcon />
+                  {/* <SitemarkIcon /> */}
+                  {errmsg && (
+                    <p style={{ backgroundColor: "red", color: "blue" }}>
+                      {errmsg}
+                    </p>
+                  )}
                   <Typography
                     component="h1"
                     variant="h4"
@@ -306,9 +365,13 @@ export default function SignIn(props) {
                     <ForgotPassword open={open} handleClose={handleClose} />
                     <Button
                       type="submit"
+                      disabled={loading}
                       fullWidth
-                      variant="contained"
+                      // variant="contained"
+                      variant="outlined"
                       onClick={validateInputs}
+                      loading={loading}
+                      loadingPosition="center"
                     >
                       Sign in
                     </Button>

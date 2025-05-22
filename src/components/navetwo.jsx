@@ -48,7 +48,7 @@ const settingsauth = {
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { userlogedin, handleuserChange, apilogout, Admin } =
+  const { userlogedin, handleuserChange, logoutApiCall, Admin } =
     useContext(RoomContext);
   // console.log(typeof handleuserChange);
   const [thisUserLoged, SetThisUserLoged] = useState(null);
@@ -94,7 +94,7 @@ function ResponsiveAppBar() {
     margin: ".4rem",
     // color: " hsl(0deg 0% 100%)",
     padding: ".6rem",
-    fontSize: "1.1rem",
+    fontSize: "1rem",
     fontFamily: `'Lilita One', 'Coral Pixels' , cursive`,
     fontOpticalSizing: "auto",
     fontWeight: "600",
@@ -115,7 +115,7 @@ function ResponsiveAppBar() {
       SetUser(null);
       navigate("/");
     } else {
-      apilogout();
+      logoutApiCall();
       SetUser(null);
       navigate("/");
     }
@@ -124,7 +124,7 @@ function ResponsiveAppBar() {
   return (
     <AppBar
       position="fixed"
-      style={{ backgroundColor: "#070707ba", minHeight: "4vh" }}
+      style={{ backgroundColor: "transparent", minHeight: "4vh" }}
     >
       <Container maxWidth="xl">
         <ToastContainer
@@ -244,9 +244,8 @@ function ResponsiveAppBar() {
               // pages.map(([key,value]) => (
 
               Object.keys(pages).map((item, i) => (
-                <Link to={pages[item]}>
+                <Link to={pages[item]} key={item}>
                   <Button
-                    key={item}
                     onClick={handleCloseNavMenu}
                     sx={stylebtn}
                     className={`nav-link ${location.pathname === pages[item] ? "active" : ""}`}
@@ -354,6 +353,15 @@ function ResponsiveAppBar() {
                     <MenuItem onClick={handleCloseUserMenu}>
                       <Typography sx={{ textAlign: "center" }}>
                         Send Message
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link to="/mybooking2">
+                    {" "}
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography sx={{ textAlign: "center" }}>
+                        {" "}
+                        mybooking{" "}
                       </Typography>
                     </MenuItem>
                   </Link>

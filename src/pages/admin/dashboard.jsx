@@ -58,8 +58,9 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   // console.log(userlogedin)
-  const { userlogedin, handleuserChange, apilogout } = useContext(RoomContext);
-  console.log(typeof handleuserChange);
+  const { userlogedin, handleuserChange, logoutApiCall } =
+    useContext(RoomContext);
+  // console.log(typeof handleuserChange);
   const [thisUserLoged, SetThisUserLoged] = useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -67,7 +68,7 @@ function ResponsiveAppBar() {
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-    console.log(handleuserChange(), "HANDLER");
+    // console.log(handleuserChange(), "HANDLER");
     SetThisUserLoged(handleuserChange());
   };
 
@@ -101,10 +102,10 @@ function ResponsiveAppBar() {
     },
   };
   function logout() {
-    apilogout();
+    logoutApiCall();
   }
   useEffect(() => {
-    console.log("hi");
+    // console.log("hi");
     SetThisUserLoged(localStorage.getItem("userProfile"));
     // SetThisUserLoged(handleuserChange);
   }, [thisUserLoged]);
@@ -264,7 +265,7 @@ function ResponsiveAppBar() {
                       </Link>
                     </MenuItem>
                     <MenuItem onClick={handleCloseUserMenu}>
-                      <Link to="/" onClick={apilogout}>
+                      <Link to="/" onClick={logoutApiCall}>
                         <Typography sx={{ textAlign: "center" }}>
                           {" "}
                           logout

@@ -17,13 +17,16 @@ import SignIn from "./pages/sign-in/SignIn";
 import Profile from "./pages/userprofile/profile";
 import { useLocation } from "react-router-dom";
 import Mybooking from "./pages/mybooking";
+import Mybooking2 from "./pages/mybooking2";
+
 import { usePathname } from "./use-pathname";
 import { useEffect, useContext } from "react";
 import AdminDash from "./pages/admin/dashboard";
 import { RoomContext } from "./context/context";
 import { Protector } from "./pages/protector";
 import { extendTheme } from "@chakra-ui/react";
-
+import Layout from "./components/Layout";
+import RequireAuth from "./components/RequireAuth";
 import { SaasProvider, theme as baseTheme } from "@saas-ui/react";
 export const myTheme = extendTheme(
   {
@@ -71,7 +74,7 @@ function App() {
       {" "}
       {!isAdmin && <Nave />}
       {isAdmin && <AdminDash />}
-      <Routes>
+      <Routes path="/" element={<Layout />}>
         <Route exact path="/" Component={Home} />
         <Route exact path="/contact" element={<Contact />} />
         <Route exact path="/about" element={<About />} />
@@ -82,21 +85,28 @@ function App() {
         <Route exact path="/reg" element={<SignUp />} />
         <Route exact path="/login" element={<SignIn />} />
 
-        <Route
-          exact
-          path="/profile"
-          element={
-            <SaasProvider theme={myTheme}>
-              <Protector Component={<Profile />} />{" "}
-            </SaasProvider>
-          }
-        />
+        <Route element={<RequireAuth allowedRoles={[2001]} />}>
+          <Route
+            exact
+            path="/profile"
+            element={
+              <SaasProvider theme={myTheme}>
+                {Profile()}
+                {/* <Protector Component={<Profile />} />{" "} */}
+              </SaasProvider>
+            }
+          />
 
-        <Route
-          exact
-          path="/mybooking"
-          element={<Protector Component={<Mybooking />} />}
-        />
+          <Route
+            exact
+            path="/mybooking"
+            element={<Mybooking />}
+
+            // element={<Protector Component={<Mybooking />} />}
+          />
+        </Route>
+        <Route exact path="/mybooking2" element={<Mybooking2 />} />
+
         <Route path="*" element={<Error />} />
       </Routes>
       {!isAdmin && <Footer />}

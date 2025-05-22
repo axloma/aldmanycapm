@@ -431,10 +431,10 @@ export default function Checkout(props) {
                     {/* // pass handleNext to getStepContent here
                   <Typography>{getStepContent(index, {checkoutForm, handleChange, handleNext})}</Typography> */}
                     <Typography variant="subtitle2" gutterBottom>
-                      Selected products
+                      TOTAL PRICE
                     </Typography>
                     <Typography variant="body1">
-                      {activeStep >= 2 ? "$144.97" : "$134.98"}
+                      {activeStep >= 2 ? price : price}
                     </Typography>
                   </div>
                   <InfoMobile

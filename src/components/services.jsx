@@ -65,6 +65,7 @@ const services = () => {
                     src={`https:${img.fields.file.url}` || defaultImg}
                     alt=""
                     className="img-fluid"
+                    // style={{ maxHeight: "30vh", maxWidth: "20vw" }}
                   />
                   <p>{desc}.</p>
                 </div>

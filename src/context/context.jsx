@@ -95,46 +95,6 @@ export default class RoomProvider extends Component {
         this.Admin = true;
       }
 
-      this.loginApiCall = async (payload) => {
-        const res = await axios
-          .post(`${process.env.REACT_APP_Backend_URL}/auth`, payload, {
-            withCredentials: true,
-          })
-          .catch((err) =>
-            toast.error(
-              `ERROR  Username or password are not correct ${err.message}`
-            )
-          );
-        // .then(alert("welcome"));
-
-        const apiResponse = await axios
-          .get(`${process.env.REACT_APP_Backend_URL}/refresh`, {
-            withCredentials: true,
-          })
-          .then((res) => {
-            this.user = res.data.user;
-
-            this.userlogedin = true;
-            localStorage.setItem("userProfile", JSON.stringify(res.data.user));
-            localStorage.setItem("token", res.data.accessToken);
-          })
-          .catch((err) => {
-            toast.error(`ERROR  SOMETHING WENT WRONG  ${err.message}`);
-          });
-
-        return this.userlogedin;
-      };
-      this.logoutApiCall = async () => {
-        localStorage.removeItem("userProfile");
-        localStorage.removeItem("token");
-        // localStorage.clear();
-        this.user = null;
-        this.userlogedin = false;
-        this.Admin = false;
-        await axios.get(`${process.env.REACT_APP_Backend_URL}/logout`, {
-          withCredentials: true,
-        });
-      };
       this.handleuser = () => {
         // userlogedin = this.userlogedin;
         return this.userlogedin;
@@ -157,8 +117,8 @@ export default class RoomProvider extends Component {
         service: service,
         //user
         user: this.user,
-        apilogin: this.loginApiCall,
-        apilogout: this.logoutApiCall,
+        // apilogin: this.loginApiCall,
+        // apilogout: this.logoutApiCall,
         userlogedin: this.userlogedin,
         Admin: this.isAdmin,
         handleuserChange: this.handleuser,
@@ -219,6 +179,46 @@ export default class RoomProvider extends Component {
       this.filterRooms
     );
   };
+  loginApiCall = async (payload) => {
+    const res = await axios
+      .post(`${process.env.REACT_APP_Backend_URL}/auth`, payload, {
+        withCredentials: true,
+      })
+      .catch((err) =>
+        toast.error(
+          `ERROR  Username or password are not correct ${err.message}`
+        )
+      );
+    // .then(alert("welcome"));
+
+    const apiResponse = await axios
+      .get(`${process.env.REACT_APP_Backend_URL}/refresh`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        this.user = res.data.user;
+
+        this.userlogedin = true;
+        localStorage.setItem("userProfile", JSON.stringify(res.data.user));
+        localStorage.setItem("token", res.data.accessToken);
+      })
+      .catch((err) => {
+        toast.error(`ERROR  SOMETHING WENT WRONG  ${err.message}`);
+      });
+
+    return this.userlogedin;
+  };
+  logoutApiCall = async () => {
+    localStorage.removeItem("userProfile");
+    localStorage.removeItem("token");
+    // localStorage.clear();
+    this.user = null;
+    this.userlogedin = false;
+    this.Admin = false;
+    await axios.get(`${process.env.REACT_APP_Backend_URL}/logout`, {
+      withCredentials: true,
+    });
+  };
   filterRooms = () => {
     let { rooms, type, capacity, price, minSize, maxSize, breakfast, pets } =
       this.state;
@@ -262,6 +262,8 @@ export default class RoomProvider extends Component {
           ...this.state,
           getRoom: this.getRoom,
           handleChange: this.handleChange,
+          loginApiCall: this.loginApiCall,
+          logoutApiCall: this.logoutApiCall,
         }}
       >
         {this.props.children}

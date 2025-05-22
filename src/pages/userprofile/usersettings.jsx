@@ -34,8 +34,8 @@ export const UserSettings = () => {
           style={{ boxShadow: "5px 10px 8px 10px black" }}
         >
           <Persona
-            name="Velda Kiara"
-            secondaryLabel="Pro Plan"
+            name={user?.name || "Velda Kiara"}
+            secondaryLabel={user?.email || "Pro Plan"}
             size="lg"
             letterSpacing="0.78px"
           />
@@ -45,7 +45,7 @@ export const UserSettings = () => {
           onSubmit={handleSubmit}
           defaultValues={{
             firstName: user?.username,
-            lastName: user?.username.split(" ")[1],
+            lastName: user?.username?.split(" ")[1],
             email: user?.email || "velda@gmail.com",
           }}
           style={{
