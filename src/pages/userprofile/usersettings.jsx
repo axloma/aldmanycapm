@@ -34,8 +34,12 @@ export const UserSettings = () => {
           style={{ boxShadow: "5px 10px 8px 10px black" }}
         >
           <Persona
-            name={user?.name || "Velda Kiara"}
-            secondaryLabel={user?.email || "Pro Plan"}
+            name={user?.name || user?.username || "Velda Kiara"}
+            secondaryLabel={
+              <div style={{ backgroundColor: "black" }}>
+                {user?.email || "Pro Plan"}{" "}
+              </div>
+            }
             size="lg"
             letterSpacing="0.78px"
           />
