@@ -13,7 +13,7 @@ import Hero from "../components/hero";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 // import axios from "../api/axios";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
@@ -24,32 +24,55 @@ export default function BasicTable() {
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
-  const [confid, SetConfId] = useState();
+  const [confid, SetConfId] = useState("");
+  const [message, SetMsg] = useState();
+  const [searchParams, setSearchParams] = useSearchParams();
+  searchParams.get("confid");
+  console.log(searchParams.get("confid"));
+  useEffect(() => {
+    if (searchParams.get("confid")) {
+      SetConfId(searchParams.get("confid"));
+    }
+  }, []);
+
   let newb;
 
   const getb = async () => {
     if (confid.trim() != "") {
       const controller = new AbortController();
-      const response = await axios
-        .get(
-          `${process.env.REACT_APP_Backend_URL}/bookingconf/confid/${confid}`
-        )
-        .then((res) => {
-          console.log(res, "FROM MYBOOKING");
-          // isMounted && SetBooking(res.data);
-          newb = res?.data?.map((item, index) => {
-            let bookinfo = Object.values(item[0].bookitem);
-            bookinfo = bookinfo[0];
-            const room = item[0].room;
-            const newroom = { bookinfo, room };
-            // console.log(bookedinfo, "BOOKEDINFO");
-            return newroom;
+      try {
+        const response = await axios
+          .get(
+            `${process.env.REACT_APP_Backend_URL}/bookingconf/confid/${confid}`,
+            {
+              headers: { "Content-Type": "application/json" },
+              // withCredentials: true,
+            }
+          )
+          .then((res) => {
+            SetMsg("");
+            // console.log(res, "FROM MYBOOKING");
+            // isMounted && SetBooking(res.data);
+            newb = res?.data?.map((item, index) => {
+              let bookinfo = Object.values(item[0].bookitem);
+              bookinfo = bookinfo[0];
+              const room = item[0].room;
+              const newroom = { bookinfo, room };
+              // console.log(bookedinfo, "BOOKEDINFO");
+              return newroom;
+            });
+            SetBookedinfo(newb);
           });
-          SetBookedinfo(newb);
-        })
-        .catch((err) => console.log(err));
+        // console.log(response);
+        // .catch((err) => console.log(err));
+      } catch (err) {
+        // console.log(err?.response?.data?.message);
+        SetMsg(err?.response?.data?.message);
+        // console.log(err?.message);
+      }
     } else {
-      console.log(confid);
+      //   console.log(confid);
+      SetMsg("CONFIRMATION ID CANNOT BE EMPTY");
     }
   };
 
@@ -57,7 +80,11 @@ export default function BasicTable() {
     <>
       <Hero title={"About Us"} />{" "}
       <FormControl style={{ width: "100%" }}>
+        {message && (
+          <p style={{ backgroundColor: "red", color: "blue" }}> {message} </p>
+        )}
         <FormLabel htmlFor="email">CONFIRMATION ID</FormLabel>
+
         <TextField
           id="email"
           type="email"
@@ -66,9 +93,9 @@ export default function BasicTable() {
           autoComplete="email"
           autoFocus
           required
-          fullWidth
+          //   fullWidth
           variant="outlined"
-          //   value={confid}
+          value={confid}
           onChange={(e) => SetConfId(e.target.value)}
         />
         <Button

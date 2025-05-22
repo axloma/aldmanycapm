@@ -96,7 +96,13 @@ function getStepContent(step) {
       );
     case 2:
       const subj = "YOUR PAYMENT HAS Verified";
-      const msg = `<div style="background-color:black ; text-decoration:none ;text-align:center ;position:relative;height:14vh"><h1><a  href="https://www.aldamanycamp.info" style="text-decoration: none ;cursor:pointer">aldamanycamp.info</a></h1><h2><hr/>YOUR CONFIRMATION ID: ${confid}</h2></div>`;
+      // const msg = `<div style="background-color:black ; text-decoration:none ;text-align:center ;position:relative;height:14vh"><h1><a  href="https://www.aldamanycamp.info" style="text-decoration: none ;cursor:pointer">aldamanycamp.info</a></h1><h2><hr/>YOUR CONFIRMATION ID: ${confid}</h2></div>`;
+      const msg = `<div style="background-color:black ; text-decoration:none ;text-align:center ;position:relative;height:14vh">
+              <h1><a  href="https://www.aldamanycamp.info" style="text-decoration: none ;cursor:pointer">aldamanycamp.info</a>
+              </h1>
+              <h2 style="background-color:blue ; color: white "><hr/><a href=https://www.aldamanycamp.info/mybooking2?confid=${confid} >YOUR CONFIRMATION ID: ${confid}</a></h2>
+
+              </div>`;
       const automail = async () => {
         const result = await axios
           .post(
