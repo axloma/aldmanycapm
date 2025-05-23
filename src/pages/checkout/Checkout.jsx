@@ -32,6 +32,7 @@ import Mail from "./mail";
 import "@stripe/stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import { render } from "@react-email/render";
 import {
   PaymentElement,
   useStripe,
@@ -98,7 +99,8 @@ function getStepContent(step) {
       const subj = "YOUR PAYMENT HAS Verified";
       // const msg = `<div style="background-color:black ; text-decoration:none ;text-align:center ;position:relative;height:14vh"><h1><a  href="https://www.aldamanycamp.info" style="text-decoration: none ;cursor:pointer">aldamanycamp.info</a></h1><h2><hr/>YOUR CONFIRMATION ID: ${confid}</h2></div>`;
       // const msg = `<div style="background-color:black ; text-decoration:none ;text-align:center ;position:relative;height:14vh"><h1><a  href="https://www.aldamanycamp.info" style="text-decoration: none ;cursor:pointer">aldamanycamp.info</a></h1><h2 style="background-color:blue ; color: gray "><hr/><a href="https://www.aldamanycamp.info/mybooking2?confid=${confid}" >YOUR CONFIRMATION ID: ${confid} </a></h2></div>`;
-      // const msg = <Mail />;
+      const msg = render(<Mail />, { pretty: true });
+
       const automail = async () => {
         const result = await axios
           .post(
@@ -106,7 +108,7 @@ function getStepContent(step) {
             {
               useremail,
               subj,
-              msg: Mail(),
+              msg,
             },
             {
               headers: {

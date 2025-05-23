@@ -18,9 +18,9 @@ interface LinearLoginCodeEmailProps {
   validationCode?: string;
 }
 
-const baseUrl = process.env.REACT_APP_Backend_URL
-  ? `https://${process.env.REACT_APP_Backend_URL}`
-  : "";
+// const baseUrl = process.env.REACT_APP_Backend_URL
+//   ? `https://${process.env.REACT_APP_Backend_URL}`
+//   : "";
 
 export const LinearLoginCodeEmail = ({
   validationCode,
@@ -31,7 +31,7 @@ export const LinearLoginCodeEmail = ({
       <Preview>Your login code for Linear</Preview>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/static/linear-logo.png`}
+          // src={`${baseUrl}/static/linear-logo.png`}
           width="42"
           height="42"
           alt="Linear"
