@@ -97,7 +97,7 @@ export default function SignIn(props) {
   const [profile, SetProfile] = useState();
   // const { apilogin, userlogedin, loginApiCall } = useContext(RoomContext);
   const [showPassword, SetShowPassword] = useState(false);
-  const { setAuth } = useAuth();
+  const { setAuth, auth, persist, setPersist } = useAuth();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
   const [loading, SetLoading] = useState(false);
@@ -159,7 +159,13 @@ export default function SignIn(props) {
       );
       const accessToken = res?.data?.accessToken;
       const roles = res?.data?.roles;
+      console.log(roles, "BEFORE AUT");
       setAuth({ user: payload.user, roles, accessToken });
+      console.log(auth);
+      // localStorage.setItem(
+      //   "userProfile",
+      //   JSON.stringify({ user: payload.user, roles })
+      // );
     } catch (err) {
       SetLoading(false);
       if (!err?.response) {
@@ -192,7 +198,11 @@ export default function SignIn(props) {
         // this.user = res.data.user;
 
         userlogedin = true;
-        localStorage.setItem("userProfile", JSON.stringify(res.data.user));
+        const userProfile = { ...res?.data.user, roles: res?.data?.roles };
+        localStorage.setItem("userProfile", JSON.stringify(userProfile));
+        // console.log(roles, "BEFORE profile");
+
+        // localStorage.setItem("userProfile", JSON.stringify(userProfile));
         // localStorage.setItem("token", res.data.accessToken);
       })
       .catch((err) => {
@@ -241,6 +251,11 @@ export default function SignIn(props) {
           let dat = res.data;
           // SetProfile(res.data);
           localStorage.setItem("userProfile", JSON.stringify(res.data));
+          setAuth({
+            user: res.data?.email,
+            roles: [2001],
+            accessToken: codeResponse.access_token,
+          });
           // localStorage.setItem(
           //   "token",
           //   JSON.stringify(codeResponse.access_token)
@@ -266,6 +281,12 @@ export default function SignIn(props) {
       navigate("/profile");
     }
   }, [userloged]);
+  useEffect(() => {
+    localStorage.setItem("persist", persist);
+  }, [persist]);
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
+  };
   return (
     <>
       {!userloged && (
@@ -359,7 +380,15 @@ export default function SignIn(props) {
                       {/* </InputAdornment> */}
                     </FormControl>
                     <FormControlLabel
-                      control={<Checkbox value="remember" color="primary" />}
+                      control={
+                        <Checkbox
+                          value="remember"
+                          color="primary"
+                          id="persist"
+                          onChange={togglePersist}
+                          checked={persist}
+                        />
+                      }
                       label="Remember me"
                     />
                     <ForgotPassword open={open} handleClose={handleClose} />
@@ -394,6 +423,7 @@ export default function SignIn(props) {
                       variant="outlined"
                       onClick={login}
                       startIcon={<GoogleIcon />}
+                      disabled={true}
                     >
                       Sign in with Google
                       {/* <GoogleLogin
@@ -417,6 +447,7 @@ export default function SignIn(props) {
                       variant="outlined"
                       onClick={() => alert("Sign in with Facebook")}
                       startIcon={<FacebookIcon />}
+                      disabled={true}
                     >
                       Sign in with Facebook
                     </Button>

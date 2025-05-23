@@ -28,6 +28,8 @@ import { extendTheme } from "@chakra-ui/react";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
 import { SaasProvider, theme as baseTheme } from "@saas-ui/react";
+import Unauthorized from "./pages/Unauthorized";
+import PersistLogin from "./components/PersistLogin";
 export const myTheme = extendTheme(
   {
     styles: {
@@ -84,29 +86,30 @@ function App() {
         <Route exact path="/checkout" element={<Checkout />} />
         <Route exact path="/reg" element={<SignUp />} />
         <Route exact path="/login" element={<SignIn />} />
+        <Route element={<PersistLogin />}>
+          <Route element={<RequireAuth allowedRoles={[2001]} />}>
+            <Route
+              exact
+              path="/profile"
+              element={
+                <SaasProvider theme={myTheme}>
+                  {Profile()}
+                  {/* <Protector Component={<Profile />} />{" "} */}
+                </SaasProvider>
+              }
+            />
 
-        <Route element={<RequireAuth allowedRoles={[2001]} />}>
-          <Route
-            exact
-            path="/profile"
-            element={
-              <SaasProvider theme={myTheme}>
-                {Profile()}
-                {/* <Protector Component={<Profile />} />{" "} */}
-              </SaasProvider>
-            }
-          />
+            <Route
+              exact
+              path="/mybooking"
+              element={<Mybooking />}
 
-          <Route
-            exact
-            path="/mybooking"
-            element={<Mybooking />}
-
-            // element={<Protector Component={<Mybooking />} />}
-          />
+              // element={<Protector Component={<Mybooking />} />}
+            />
+          </Route>
         </Route>
         <Route exact path="/mybooking2" element={<Mybooking2 />} />
-
+        <Route exact path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<Error />} />
       </Routes>
       {!isAdmin && <Footer />}

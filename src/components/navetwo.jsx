@@ -24,7 +24,7 @@ import logo from "../assets/logo.jpeg";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import { Translate } from "react-bootstrap-icons";
 import { ToastContainer, toast } from "react-toastify";
-
+import useLogout from "../hooks/useLogout";
 const pages = {
   HOME: "/",
   "about us": "/about",
@@ -107,7 +107,8 @@ function ResponsiveAppBar() {
       transform: "translateY(-2px)",
     },
   };
-  function logout() {
+  const Logout = useLogout();
+  async function logout() {
     if (user?.verified_email) {
       googleLogout();
       localStorage.removeItem("userProfile");
@@ -115,7 +116,8 @@ function ResponsiveAppBar() {
       SetUser(null);
       navigate("/");
     } else {
-      logoutApiCall();
+      // logoutApiCall();
+      await Logout();
       SetUser(null);
       navigate("/");
     }
