@@ -28,7 +28,7 @@ import { format, isFuture, isPast } from "date-fns";
 import axios from "axios";
 import validator from "validator";
 import { toast } from "react-toastify";
-
+import Mail from "./mail";
 import "@stripe/stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -97,7 +97,8 @@ function getStepContent(step) {
     case 2:
       const subj = "YOUR PAYMENT HAS Verified";
       // const msg = `<div style="background-color:black ; text-decoration:none ;text-align:center ;position:relative;height:14vh"><h1><a  href="https://www.aldamanycamp.info" style="text-decoration: none ;cursor:pointer">aldamanycamp.info</a></h1><h2><hr/>YOUR CONFIRMATION ID: ${confid}</h2></div>`;
-      const msg = `<div style="background-color:black ; text-decoration:none ;text-align:center ;position:relative;height:14vh"><h1><a  href="https://www.aldamanycamp.info" style="text-decoration: none ;cursor:pointer">aldamanycamp.info</a></h1><h2 style="background-color:blue ; color: gray "><hr/><a href="https://www.aldamanycamp.info/mybooking2?confid=${confid}" >YOUR CONFIRMATION ID: ${confid} </a></h2></div>`;
+      // const msg = `<div style="background-color:black ; text-decoration:none ;text-align:center ;position:relative;height:14vh"><h1><a  href="https://www.aldamanycamp.info" style="text-decoration: none ;cursor:pointer">aldamanycamp.info</a></h1><h2 style="background-color:blue ; color: gray "><hr/><a href="https://www.aldamanycamp.info/mybooking2?confid=${confid}" >YOUR CONFIRMATION ID: ${confid} </a></h2></div>`;
+      // const msg = <Mail />;
       const automail = async () => {
         const result = await axios
           .post(
@@ -105,7 +106,7 @@ function getStepContent(step) {
             {
               useremail,
               subj,
-              msg,
+              msg: Mail(),
             },
             {
               headers: {
