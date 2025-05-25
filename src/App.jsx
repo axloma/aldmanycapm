@@ -30,6 +30,8 @@ import RequireAuth from "./components/RequireAuth";
 import { SaasProvider, theme as baseTheme } from "@saas-ui/react";
 import Unauthorized from "./pages/Unauthorized";
 import PersistLogin from "./components/PersistLogin";
+
+import ADash from "./pages/admin/dash";
 export const myTheme = extendTheme(
   {
     styles: {
@@ -103,6 +105,13 @@ function App() {
               exact
               path="/mybooking"
               element={<Mybooking />}
+
+              // element={<Protector Component={<Mybooking />} />}
+            />
+            <Route
+              exact
+              path="/ADash"
+              element={ADash()}
 
               // element={<Protector Component={<Mybooking />} />}
             />

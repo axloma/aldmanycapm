@@ -95,10 +95,10 @@ export default function SingleRoom() {
           </Slider>
         </div>
         <div className="single-room-info">
-          <article className="desc">
+          {/* <article className="desc">
             <h3>details</h3>
             <p>{description}</p>
-          </article>
+          </article> */}
           <article className="info infox">
             <h3>info</h3>
             <h6>price : ${price}</h6>
@@ -113,12 +113,12 @@ export default function SingleRoom() {
         </div>
       </section>
       <section className="room-extras">
-        <h6>extras </h6>
+        {/* <h6>extras </h6>
         <ul className="extras">
           {extras != undefined || ""
             ? extras.map((item, index) => <li key={index}>- {item}</li>)
             : ""}
-        </ul>
+        </ul> */}
         <Booking room={room} />
       </section>
     </>

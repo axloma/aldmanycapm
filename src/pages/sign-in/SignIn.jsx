@@ -30,13 +30,13 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import Cookies from 'js-cookie';
-import { useContext, useState, useEffect } from "react";
-import { RoomContext } from "../../context/context";
-import { GoogleLogin } from "@react-oauth/google";
-import jwtInterceptor from "../../components/jwtintercept";
-import { jwtDecode } from "jwt-decode";
+// import { useContext, useState, useEffect } from "react";
+// import { RoomContext } from "../../context/context";
+// import { GoogleLogin } from "@react-oauth/google";
+// import jwtInterceptor from "../../components/jwtintercept";
+// import { jwtDecode } from "jwt-decode";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 // import AuthContext from "../../context/AuthProvider";
 import useAuth from "../../hooks/useAuth";
 // import { useEffect } from 'react';
@@ -100,6 +100,7 @@ export default function SignIn(props) {
   const { setAuth, auth, persist, setPersist } = useAuth();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  console.log(from, "FROM ");
   const [loading, SetLoading] = useState(false);
   const handleShowPassword = () => {
     SetShowPassword((prev) => !prev);

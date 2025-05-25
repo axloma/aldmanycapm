@@ -28,14 +28,15 @@ import Users from "./users";
 import Customer from "./Customers";
 import Employee from "./employes";
 import { nanoid } from "nanoid";
-
+import Dash from "./dash";
 const pages = {
   transaction: <Transication />,
   mail: <Mail />,
   users: <Users />,
   Customers: <Customer />,
   addUser: <Employee />,
-  HOME: <Home />,
+  // HOME: <Home />,
+
   // "about us": "/about",
   // rooms: "/accomodation",
   // Gallery: "Gallery",
@@ -54,7 +55,7 @@ const settingsauth = {
   SendMessage: "contact",
 };
 
-function ResponsiveAppBar() {
+const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   // console.log(userlogedin)
@@ -69,7 +70,7 @@ function ResponsiveAppBar() {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
     // console.log(handleuserChange(), "HANDLER");
-    SetThisUserLoged(handleuserChange());
+    // SetThisUserLoged(handleuserChange());
   };
 
   const handleCloseNavMenu = () => {
@@ -265,6 +266,13 @@ function ResponsiveAppBar() {
                       </Link>
                     </MenuItem>
                     <MenuItem onClick={handleCloseUserMenu}>
+                      <Link to="/ADash">
+                        <Typography sx={{ textAlign: "center" }}>
+                          dash
+                        </Typography>
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseUserMenu}>
                       <Link to="/" onClick={logoutApiCall}>
                         <Typography sx={{ textAlign: "center" }}>
                           {" "}
@@ -306,5 +314,5 @@ function ResponsiveAppBar() {
       <div>{value && value}</div>
     </div>
   );
-}
+};
 export default ResponsiveAppBar;

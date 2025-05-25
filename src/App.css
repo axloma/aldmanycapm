@@ -227,6 +227,11 @@
   font-weight: bold;
 
 }
+.facilities_item img{
+  /* display: none; */
+   height: "30vh";
+   width: "30vw"
+}
 
 .footer-area{
   padding: 16px 0px;
@@ -277,6 +282,8 @@
   border: 2px solid gray;
 
 }
+
+
 .snave {
   display: flex;
   background-color: black;
@@ -690,7 +697,9 @@
     }
     .single-room-info {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      /* grid-template-columns: 1fr 1fr; */
+      grid-template-columns:1fr;
+
       grid-column-gap: 2rem;
     }
     .info {
@@ -724,6 +733,9 @@
   .USERSETTING{
     min-width: 80vw;
   }
+
+  
+  
 }
   @media screen and (min-width: 992px) {
     .roomslist-center {

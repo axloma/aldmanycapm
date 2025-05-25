@@ -7,6 +7,8 @@ import TextareaAutosize from "@mui/material/TextareaAutosize";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import logo from "../../assets/logo.jpeg";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
 const FormGrid = styled(Grid)(() => ({
   display: "flex",
   flexDirection: "column",
@@ -17,20 +19,21 @@ const styleform = {
 };
 const mail = () => {
   const [loading, setLoading] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
+  const [mesage, SetMsg] = useState("");
   const subm = async (formData) => {
     // const data = new FormData(document.getElementById("mail"));
     const email = formData.get("email");
     const from = formData.get("from");
     const subj = formData.get("subj");
     let msg = formData.get("msg");
-
     console.log(email, from, subj, msg);
     const token = localStorage.getItem("token");
     setLoading(true);
-
-    const status = await axios
+    const controller = new AbortController();
+    const status = await axiosPrivate
       .post(
-        `${process.env.REACT_APP_Backend_URL}/mail`,
+        `/mail`,
         {
           email,
           from,
@@ -39,20 +42,20 @@ const mail = () => {
         },
 
         {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
+          signal: controller.signal,
         }
       )
       .then((res) => {
         console.log(res);
+        SetMsg("SUCCESS");
         setLoading(false);
       })
       .catch((e) => {
         setLoading(false);
+        SetMsg(`Failed ${e.message}`);
+
         console.log(e);
+        console.log(e.message);
       });
   };
 
@@ -67,6 +70,19 @@ const mail = () => {
       <div className="container">
         <form action={subm} id="mail" style={styleform}>
           {" "}
+          {mesage && (
+            <p
+              style={{
+                backgroundColor: `${mesage}` === "SUCCESS" ? "green" : "red",
+                color: "blue",
+                textAlign: "center",
+                fontSize: "2rem",
+                fontWeight: "bold",
+              }}
+            >
+              {mesage}
+            </p>
+          )}
           <Grid container spacing={3}>
             <FormGrid size={{ xs: 12, md: 6 }}>
               <FormLabel

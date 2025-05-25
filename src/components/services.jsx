@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import defaultImg from "../images/defaultBcg.jpeg";
 import {
   FaBeer,
@@ -35,6 +35,24 @@ const services = () => {
     el.icon ? { ...el, icon: String(el.icon[0].replace(/^"(.*)"$/, "$1")) } : el
   );
 
+  function useMediaQuery(query) {
+    const mediaQuery = useMemo(() => window.matchMedia(query), [query]);
+    const [match, setMatch] = useState(mediaQuery.matches);
+
+    useEffect(() => {
+      const onChange = () => setMatch(mediaQuery.matches);
+      mediaQuery.addEventListener("change", onChange);
+      return () => mediaQuery.removeEventListener("change", onChange);
+    }, [mediaQuery]);
+
+    return match;
+  }
+  var styleimg = {
+    height: "30vh",
+    width: "30vw",
+    opacity: "70%",
+  };
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
   return (
     <>
       {/* <!--================ Facilities Area  =================--> */}
@@ -65,7 +83,13 @@ const services = () => {
                     src={`https:${img.fields.file.url}` || defaultImg}
                     alt=""
                     className="img-fluid"
-                    // style={{ maxHeight: "30vh", maxWidth: "20vw" }}
+                    style={
+                      !isSmallScreen
+                        ? styleimg
+                        : { height: "25vh", width: "80vw" }
+                    }
+                    // width="80"
+                    // height="100"
                   />
                   <p>{desc}.</p>
                 </div>
